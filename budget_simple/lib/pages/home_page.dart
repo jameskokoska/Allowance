@@ -161,7 +161,7 @@ class HomePageState extends State<HomePage> {
                         const SizedBox(width: 5),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     const Spacer(),
                     Tappable(
                       color: Colors.transparent,
@@ -175,99 +175,121 @@ class HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            StreamBuilder<SpendingLimitData>(
-                              stream: database.watchSpendingLimit(),
-                              builder: (context, snapshot) {
-                                if (snapshot.data == null) {
-                                  return const SizedBox();
-                                }
-                                return StreamBuilder<double?>(
-                                  stream: database.totalSpendAfterDay(
-                                      snapshot.data!.dateCreated),
-                                  builder: (context, snapshotTotalSpent) {
-                                    NumberFormat currency = getNumberFormat();
-                                    double amount = snapshot.data!.amount -
-                                        (snapshotTotalSpent.data ?? 0);
-                                    int moreDays = DateTime.now()
-                                        .difference(
-                                            snapshot.data!.dateCreatedUntil)
-                                        .inDays;
-                                    if (moreDays > 0) moreDays = 0;
-                                    moreDays = moreDays.abs();
-                                    return Column(
-                                      children: [
-                                        AnimatedSize(
-                                          duration:
-                                              const Duration(milliseconds: 700),
-                                          clipBehavior: Clip.none,
-                                          curve: Curves.elasticOut,
-                                          child: AnimatedSwitcher(
+                            Expanded(
+                              child: StreamBuilder<SpendingLimitData>(
+                                stream: database.watchSpendingLimit(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.data == null) {
+                                    return const SizedBox();
+                                  }
+                                  return StreamBuilder<double?>(
+                                    stream: database.totalSpendAfterDay(
+                                        snapshot.data!.dateCreated),
+                                    builder: (context, snapshotTotalSpent) {
+                                      NumberFormat currency = getNumberFormat();
+                                      double amount = snapshot.data!.amount -
+                                          (snapshotTotalSpent.data ?? 0);
+                                      int moreDays = DateTime.now()
+                                          .difference(
+                                              snapshot.data!.dateCreatedUntil)
+                                          .inDays;
+                                      if (moreDays > 0) moreDays = 0;
+                                      moreDays = moreDays.abs();
+                                      return Column(
+                                        children: [
+                                          AnimatedSize(
                                             duration: const Duration(
-                                                milliseconds: 900),
-                                            switchInCurve:
-                                                const ElasticOutCurve(0.6),
-                                            switchOutCurve:
-                                                const ElasticInCurve(0.6),
-                                            transitionBuilder: (Widget child,
-                                                Animation<double> animation) {
-                                              final inAnimation = Tween<Offset>(
-                                                      begin:
-                                                          const Offset(0.0, 1),
-                                                      end: const Offset(
-                                                          0.0, 0.0))
-                                                  .animate(animation);
-                                              return ClipRect(
-                                                child: SlideTransition(
-                                                  position: inAnimation,
-                                                  child: child,
+                                                milliseconds: 700),
+                                            clipBehavior: Clip.none,
+                                            curve: Curves.elasticOut,
+                                            child: AnimatedSwitcher(
+                                              duration: const Duration(
+                                                  milliseconds: 900),
+                                              switchInCurve:
+                                                  const ElasticOutCurve(0.6),
+                                              switchOutCurve:
+                                                  const ElasticInCurve(0.6),
+                                              transitionBuilder: (Widget child,
+                                                  Animation<double> animation) {
+                                                final inAnimation =
+                                                    Tween<Offset>(
+                                                            begin:
+                                                                const Offset(
+                                                                    0.0, 1),
+                                                            end: const Offset(
+                                                                0.0, 0.0))
+                                                        .animate(animation);
+                                                return ClipRect(
+                                                  clipper: BottomClipper(),
+                                                  child: SlideTransition(
+                                                    position: inAnimation,
+                                                    child: child,
+                                                  ),
+                                                );
+                                              },
+                                              child: SizedBox(
+                                                key: ValueKey(
+                                                    snapshotTotalSpent.data),
+                                                height: 67,
+                                                child: TextFont(
+                                                  text: currency.format(
+                                                      amount < 0 ? 0 : amount),
+                                                  fontSize: 55,
+                                                  fontWeight: FontWeight.bold,
+                                                  autoSizeText: true,
+                                                  minFontSize: 15,
+                                                  maxFontSize: 55,
+                                                  maxLines: 2,
                                                 ),
-                                              );
-                                            },
-                                            child: TextFont(
-                                              key: ValueKey(
-                                                  snapshotTotalSpent.data),
-                                              text: currency.format(
-                                                  amount < 0 ? 0 : amount),
-                                              fontSize: 55,
-                                              fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        TextFont(
-                                          text: " for $moreDays more days",
-                                          fontSize: 19,
-                                        ),
-                                        amount < 0
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: AnimatedSwitcher(
-                                                  duration: const Duration(
-                                                      milliseconds: 500),
-                                                  child: TextFont(
-                                                    key: ValueKey(amount),
-                                                    text:
-                                                        "${currency.format(amount.abs())} overspent",
-                                                    textColor: Theme.of(context)
-                                                        .colorScheme
-                                                        .error,
-                                                    fontSize: 15,
+                                          TextFont(
+                                            text:
+                                                "${currency.format(amount.abs() / moreDays)}/day for $moreDays more days",
+                                            fontSize: 17,
+                                            maxLines: 3,
+                                            textAlign: TextAlign.center,
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary,
+                                          ),
+                                          amount < 0
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: AnimatedSwitcher(
+                                                    duration: const Duration(
+                                                        milliseconds: 500),
+                                                    child: TextFont(
+                                                      key: ValueKey(amount),
+                                                      text:
+                                                          "${currency.format(amount.abs())} overspent",
+                                                      textColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .error,
+                                                      fontSize: 15,
+                                                      maxLines: 2,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            : const SizedBox.shrink()
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
+                                                )
+                                              : const SizedBox.shrink()
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
                     const Spacer(),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -285,6 +307,7 @@ class HomePageState extends State<HomePage> {
                                         end: const Offset(0.0, 0.0))
                                     .animate(animation);
                                 return ClipRect(
+                                  clipper: BottomClipper(),
                                   child: SlideTransition(
                                     position: inAnimation,
                                     child: child,
@@ -296,11 +319,17 @@ class HomePageState extends State<HomePage> {
                                 duration: const Duration(milliseconds: 700),
                                 clipBehavior: Clip.none,
                                 curve: Curves.elasticOut,
-                                child: TextFont(
-                                  text: formattedOutput,
-                                  fontSize: 50,
-                                  fontWeight: FontWeight.bold,
-                                  maxLines: 1,
+                                child: SizedBox(
+                                  height: 55,
+                                  child: TextFont(
+                                    text: formattedOutput,
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.bold,
+                                    maxLines: 1,
+                                    autoSizeText: true,
+                                    minFontSize: 15,
+                                    maxFontSize: 55,
+                                  ),
                                 ),
                               ),
                             ),
@@ -483,4 +512,19 @@ changeCurrencyIconBottomSheet(context) {
       );
     },
   );
+}
+
+class BottomClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTRB(
+      0.0,
+      size.height,
+      size.width,
+      -250,
+    );
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) => false;
 }

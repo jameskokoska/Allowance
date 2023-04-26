@@ -97,7 +97,10 @@ class SettingsContainer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    afterWidget ?? const SizedBox()
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: afterWidget ?? const SizedBox(),
+                    )
                   ],
                 ),
               ),

@@ -47,6 +47,10 @@ class AmountButton extends StatelessWidget {
             child: child ??
                 Center(
                   child: TextFont(
+                    autoSizeText: true,
+                    minFontSize: 15,
+                    maxFontSize: 28,
+                    maxLines: 2,
                     fontSize: 28,
                     text: text,
                     textColor:

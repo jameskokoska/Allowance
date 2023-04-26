@@ -22,32 +22,34 @@ class TransactionEntry extends StatelessWidget {
             title: const TextFont(
               text: 'Delete Transaction?',
               fontSize: 23,
+              maxLines: 3,
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFont(
-                  maxLines: 2,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  text: currency.format(transaction.amount),
-                ),
-                TextFont(
-                  maxLines: 2,
-                  fontSize: 18,
-                  text:
-                      DateFormat('MMM d, yyyy').format(transaction.dateCreated),
-                ),
-                transaction.name != ""
-                    ? TextFont(
-                        text: transaction.name,
-                        fontSize: 17,
-                        maxLines: 2,
-                        textAlign: TextAlign.right,
-                      )
-                    : const SizedBox.shrink(),
-              ],
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFont(
+                    maxLines: 2,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    text: currency.format(transaction.amount),
+                  ),
+                  TextFont(
+                    maxLines: 2,
+                    fontSize: 18,
+                    text: DateFormat('MMM d, yyyy')
+                        .format(transaction.dateCreated),
+                  ),
+                  transaction.name != ""
+                      ? TextFont(
+                          text: transaction.name,
+                          fontSize: 17,
+                          maxLines: 2,
+                        )
+                      : const SizedBox.shrink(),
+                ],
+              ),
             ),
             actions: <Widget>[
               TextButton(
@@ -86,22 +88,26 @@ class TransactionEntry extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFont(
-                        text: DateFormat('MMM d, yyyy')
-                            .format(transaction.dateCreated),
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      const SizedBox(height: 1),
-                      TextFont(
-                        text:
-                            DateFormat('h:mma').format(transaction.dateCreated),
-                        fontSize: 17,
-                      ),
-                    ],
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFont(
+                          text: DateFormat('MMM d, yyyy')
+                              .format(transaction.dateCreated),
+                          fontSize: 23,
+                          maxLines: 5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        const SizedBox(height: 1),
+                        TextFont(
+                          text: DateFormat('h:mma')
+                              .format(transaction.dateCreated),
+                          fontSize: 17,
+                          maxLines: 5,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(width: 15),
                   Flexible(
@@ -114,12 +120,13 @@ class TransactionEntry extends StatelessWidget {
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           textAlign: TextAlign.right,
+                          maxLines: 5,
                         ),
                         transaction.name != ""
                             ? TextFont(
                                 text: transaction.name,
                                 fontSize: 17,
-                                maxLines: 2,
+                                maxLines: 5,
                                 textAlign: TextAlign.right,
                               )
                             : const SizedBox.shrink(),

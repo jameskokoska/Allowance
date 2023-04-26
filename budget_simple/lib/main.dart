@@ -1,7 +1,10 @@
 import 'package:budget_simple/pages/home_page.dart';
 import 'package:budget_simple/struct/databaseGlobal.dart';
 import 'package:budget_simple/widgets/increase_limit.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:budget_simple/database/tables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +14,7 @@ TODO: Translations
 TODO: Onboarding - set up initial spending limit, currency icon
 TODO: Notifications
 TODO: ratings, IAP
-TODO: version number in about
+TODO: host on firebase
 
 adb tcpip 5555
 adb connect 192.168.0.22
@@ -41,8 +44,14 @@ void main() async {
     );
   }
   sharedPreferences = await SharedPreferences.getInstance();
+  packageInfoGlobal = await PackageInfo.fromPlatform();
   setSettings();
-  runApp(InitializeApp(key: initializeAppStateKey));
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => InitializeApp(key: initializeAppStateKey),
+    ),
+  );
 }
 
 setSettings() {
@@ -81,6 +90,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       themeAnimationDuration: const Duration(milliseconds: 1000),
       title: 'Allowance',
       theme: ThemeData(

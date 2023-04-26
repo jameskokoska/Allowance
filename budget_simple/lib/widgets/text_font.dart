@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class TextFont extends StatelessWidget {
@@ -13,6 +14,9 @@ class TextFont extends StatelessWidget {
   final TextDecoration? decoration;
   final Color? decorationColor;
   final Function(String)? filter;
+  final bool autoSizeText;
+  final double? minFontSize;
+  final double? maxFontSize;
 
   const TextFont({
     Key? key,
@@ -28,6 +32,9 @@ class TextFont extends StatelessWidget {
     this.decoration,
     this.decorationColor,
     this.filter,
+    this.autoSizeText = false,
+    this.maxFontSize,
+    this.minFontSize,
   }) : super(key: key);
 
   @override
@@ -48,13 +55,24 @@ class TextFont extends StatelessWidget {
       decorationThickness: 2,
       height: 1.1,
     );
-    return Text(
-      filter != null ? filter!(text) : text,
-      maxLines: maxLines,
-      textAlign: textAlign,
-      overflow: overflow ?? TextOverflow.ellipsis,
-      style: textStyle,
-      softWrap: softWrap,
-    );
+    return autoSizeText
+        ? AutoSizeText(
+            filter != null ? filter!(text) : text,
+            maxLines: maxLines,
+            textAlign: textAlign,
+            overflow: overflow ?? TextOverflow.ellipsis,
+            style: textStyle,
+            softWrap: softWrap,
+            minFontSize: minFontSize ?? fontSize - 10,
+            maxFontSize: maxFontSize ?? fontSize + 10,
+          )
+        : Text(
+            filter != null ? filter!(text) : text,
+            maxLines: maxLines,
+            textAlign: textAlign,
+            overflow: overflow ?? TextOverflow.ellipsis,
+            style: textStyle,
+            softWrap: softWrap,
+          );
   }
 }

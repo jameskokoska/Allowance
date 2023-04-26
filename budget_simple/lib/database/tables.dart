@@ -65,9 +65,10 @@ class TransactionsDatabase extends _$TransactionsDatabase {
         .getSingle();
   }
 
-  Stream<List<Transaction>> watchAllTransactions() {
+  Stream<List<Transaction>> watchAllTransactions({int? limit}) {
     return (select(transactions)
-          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
+          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
+          ..limit(limit ?? DEFAULT_LIMIT))
         .watch();
   }
 

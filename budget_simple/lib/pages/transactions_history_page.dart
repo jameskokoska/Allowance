@@ -25,19 +25,49 @@ class TransactionsHistoryPage extends StatelessWidget {
   }
 }
 
-class TransactionsList extends StatelessWidget {
+class TransactionsList extends StatefulWidget {
   const TransactionsList({super.key});
+
+  @override
+  State<TransactionsList> createState() => _TransactionsListState();
+}
+
+class _TransactionsListState extends State<TransactionsList> {
+  late ScrollController _scrollController;
+  int amountLoaded = DEFAULT_LIMIT;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  _scrollListener() {
+    if (_scrollController.offset >
+        _scrollController.position.maxScrollExtent - 100) {
+      _loadMore(50);
+    }
+  }
+
+  _loadMore(int amount) {
+    setState(() {
+      amountLoaded += amount;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Transaction>>(
-      stream: database.watchAllTransactions(),
+      stream: database.watchAllTransactions(limit: amountLoaded),
       builder: (context, snapshot) {
         if (snapshot.data != null) {
           return ImplicitlyAnimatedList(
+            controller: _scrollController,
             itemData: snapshot.data!,
             itemBuilder: (_, transaction) => Center(
               child: TransactionEntry(
+                key: ValueKey(transaction.id),
                 transaction: transaction,
               ),
             ),

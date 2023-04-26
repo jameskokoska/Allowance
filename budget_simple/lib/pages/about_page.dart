@@ -1,3 +1,4 @@
+import 'package:budget_simple/database/tables.dart';
 import 'package:budget_simple/pages/home_page.dart';
 import 'package:budget_simple/struct/databaseGlobal.dart';
 import 'package:budget_simple/struct/functions.dart';
@@ -24,24 +25,23 @@ class AboutPage extends StatelessWidget {
           children: [
             kIsWeb
                 ? const SizedBox.shrink()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Tappable(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondaryContainer
-                          .withOpacity(0.7),
-                      onTap: () {},
-                      borderRadius: 15,
-                      child: SizedBox(
-                        height: 270,
+                : ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 550),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Tappable(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondaryContainer
+                            .withOpacity(0.7),
+                        onTap: () {},
+                        borderRadius: 15,
                         child: Stack(
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: SizedBox(
-                                width: 450,
+                            Positioned.fill(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
                                 child: PlasmaRender(
                                   color: Theme.of(context).brightness ==
                                           Brightness.light
@@ -54,48 +54,68 @@ class AboutPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            Row(
                               children: [
-                                const TextFont(
-                                  text: "Support the Developer",
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 5,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const TextFont(
-                                  text:
-                                      "Buy the developer something off the menu!",
-                                  fontSize: 15,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 5,
-                                ),
-                                const SizedBox(
-                                  height: 25,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 28.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      DonationMenuItem(
-                                          onTap: () {},
-                                          imagePath:
-                                              "assets/icons/coffee-cup.png"),
-                                      DonationMenuItem(
-                                          onTap: () {},
-                                          imagePath:
-                                              "assets/icons/cupcake.png"),
-                                      DonationMenuItem(
-                                          onTap: () {},
-                                          imagePath: "assets/icons/salad.png"),
-                                    ],
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 40),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: TextFont(
+                                            text: "Support the Developer",
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                            textAlign: TextAlign.center,
+                                            maxLines: 5,
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: TextFont(
+                                            text:
+                                                "Buy the developer something off the menu!",
+                                            fontSize: 15,
+                                            textAlign: TextAlign.center,
+                                            maxLines: 5,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 25,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 28.0),
+                                          child: Wrap(
+                                            spacing: 15,
+                                            runSpacing: 10,
+                                            alignment: WrapAlignment.center,
+                                            children: [
+                                              DonationMenuItem(
+                                                  onTap: () {},
+                                                  imagePath:
+                                                      "assets/icons/coffee-cup.png"),
+                                              DonationMenuItem(
+                                                  onTap: () {},
+                                                  imagePath:
+                                                      "assets/icons/cupcake.png"),
+                                              DonationMenuItem(
+                                                  onTap: () {},
+                                                  imagePath:
+                                                      "assets/icons/salad.png"),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -164,6 +184,7 @@ class AboutPage extends StatelessWidget {
             ),
             const NotificationSettings(),
             const Divider(),
+            const SizedBox(height: 10),
             const AboutInfoBox(
               title: "App Inspired by Alex Dovhyi",
               link: "https://dribbble.com/shots/20474761-Simple-budgeting-app",
@@ -180,7 +201,33 @@ class AboutPage extends StatelessWidget {
               title: "Drift SQL Database",
               link: "https://drift.simonbinder.eu/",
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Tappable(
+                  borderRadius: 15,
+                  onTap: () {
+                    showLicensePage(
+                        context: context,
+                        applicationVersion:
+                            "${"v${packageInfoGlobal.version}+${packageInfoGlobal.buildNumber}"}, db-v$schemaVersionGlobal",
+                        applicationLegalese:
+                            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: TextFont(
+                      textColor: Theme.of(context).colorScheme.tertiary,
+                      fontSize: 15,
+                      text:
+                          "${"v${packageInfoGlobal.version}+${packageInfoGlobal.buildNumber}"}, db-v$schemaVersionGlobal",
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
