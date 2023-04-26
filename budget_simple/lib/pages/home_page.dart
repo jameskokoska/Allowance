@@ -1,3 +1,4 @@
+import 'package:budget_simple/pages/about_page.dart';
 import 'package:budget_simple/pages/transactions_history_page.dart';
 import 'package:budget_simple/struct/databaseGlobal.dart';
 import 'package:budget_simple/struct/functions.dart';
@@ -21,6 +22,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   String amountCalculated = "";
   String formattedOutput = "";
+  bool showedWarningSnackbar = false;
   late TextEditingController _textController;
 
   @override
@@ -70,13 +72,15 @@ class HomePageState extends State<HomePage> {
           ),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
         removeAllAmount();
       } else {
-        const snackBar = SnackBar(
-          content: Text('Enter an amount'),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        if (showedWarningSnackbar == false) {
+          const snackBar = SnackBar(
+            content: Text('Enter an amount'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          showedWarningSnackbar = true;
+        }
       }
     } else if (action == ".") {
       if (amountCalculated == "") {
@@ -90,6 +94,7 @@ class HomePageState extends State<HomePage> {
         return;
       }
       if ((double.tryParse(amountCalculated) ?? 0) < MAX_AMOUNT) {
+        showedWarningSnackbar = false;
         amountCalculated += action;
       }
     }
@@ -104,36 +109,6 @@ class HomePageState extends State<HomePage> {
         getNumberFormat(decimals: amountCalculated.contains(".") ? 2 : 0);
     formattedOutput = currency.format(double.tryParse(amountCalculated));
     setState(() {});
-  }
-
-  addAmountBottomSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      constraints: const BoxConstraints(maxWidth: 350),
-      builder: (BuildContext context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: const IncreaseLimit(),
-        );
-      },
-    );
-  }
-
-  changeCurrencyIconBottomSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      constraints: const BoxConstraints(maxWidth: 350),
-      builder: (BuildContext context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: const ChangeCurrencyIcon(),
-        );
-      },
-    );
   }
 
   @override
@@ -168,25 +143,20 @@ class HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          visualDensity: VisualDensity.compact,
-                          onPressed: () {
-                            addAmountBottomSheet();
-                          },
-                          icon: const Icon(Icons.arrow_circle_up_rounded),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            changeCurrencyIconBottomSheet();
-                          },
-                          icon: const Icon(Icons.category_rounded),
-                          visualDensity: VisualDensity.compact,
-                        ),
-                        IconButton(
                           onPressed: () {
                             pushRoute(context, const TransactionsHistoryPage());
                           },
                           icon: const Icon(Icons.receipt),
-                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.comfortable,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            pushRoute(context, const AboutPage());
+                          },
+                          icon: const Icon(Icons.settings),
+                          padding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.comfortable,
                         ),
                         const SizedBox(width: 5),
                       ],
@@ -196,7 +166,7 @@ class HomePageState extends State<HomePage> {
                     Tappable(
                       color: Colors.transparent,
                       onTap: () {
-                        addAmountBottomSheet();
+                        addAmountBottomSheet(context);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -343,10 +313,17 @@ class HomePageState extends State<HomePage> {
                       controller: _textController,
                       textAlign: TextAlign.right,
                       maxLength: 40,
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 20),
                         hintText: 'Transaction Name',
                         counterText: "",
+                        hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondary
+                              .withOpacity(0.5),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -476,4 +453,34 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+addAmountBottomSheet(context) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    constraints: const BoxConstraints(maxWidth: 350),
+    builder: (BuildContext context) {
+      return Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: const IncreaseLimit(),
+      );
+    },
+  );
+}
+
+changeCurrencyIconBottomSheet(context) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    constraints: const BoxConstraints(maxWidth: 350),
+    builder: (BuildContext context) {
+      return Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: const ChangeCurrencyIcon(),
+      );
+    },
+  );
 }

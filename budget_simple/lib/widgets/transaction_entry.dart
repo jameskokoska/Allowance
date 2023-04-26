@@ -12,7 +12,7 @@ class TransactionEntry extends StatelessWidget {
   final Transaction transaction;
   @override
   Widget build(BuildContext context) {
-    double maxWidth = 400;
+    const double maxWidth = 450;
     NumberFormat currency = getNumberFormat();
     return Tappable(
       onTap: () async {
@@ -79,7 +79,7 @@ class TransactionEntry extends StatelessWidget {
       child: Column(
         children: [
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth),
+            constraints: const BoxConstraints(maxWidth: maxWidth),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(

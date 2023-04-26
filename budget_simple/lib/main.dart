@@ -7,9 +7,11 @@ import 'package:budget_simple/database/tables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*
-
 TODO: Translations
 TODO: Onboarding - set up initial spending limit, currency icon
+TODO: Notifications
+TODO: ratings, IAP
+TODO: version number in about
 
 adb tcpip 5555
 adb connect 192.168.0.22
@@ -45,6 +47,12 @@ void main() async {
 
 setSettings() {
   currencyIcon = sharedPreferences.getString("currencyIcon") ?? "\$";
+  notifications = sharedPreferences.getBool("notifications") ?? true;
+  String notificationsTimeStr =
+      sharedPreferences.getString("notificationsTime") ?? "16:00";
+  notificationsTime = TimeOfDay(
+      hour: int.parse(notificationsTimeStr.split(":")[0]),
+      minute: int.parse(notificationsTimeStr.split(":")[1]));
 }
 
 GlobalKey<_InitializeAppState> initializeAppStateKey = GlobalKey();
@@ -74,29 +82,25 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       themeAnimationDuration: const Duration(milliseconds: 1000),
-      title: 'Budget Simple',
+      title: 'Allowance',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: SystemTheme.accentColor.accent,
           brightness: Brightness.light,
-          background: Colors.white,
         ),
         snackBarTheme: const SnackBarThemeData(
           actionTextColor: Color(0xFF81A2D4),
         ),
         useMaterial3: true,
         applyElevationOverlayColor: false,
-        canvasColor: Colors.white,
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: SystemTheme.accentColor.accent,
           brightness: Brightness.dark,
-          background: Colors.black,
         ),
         snackBarTheme: const SnackBarThemeData(),
         useMaterial3: true,
-        canvasColor: Colors.black,
       ),
       themeMode: ThemeMode.system,
       home: const SafeArea(

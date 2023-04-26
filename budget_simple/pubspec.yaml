@@ -20,6 +20,9 @@ dependencies:
   intl: ^0.17.0
   implicitly_animated_list: ^2.2.0
   universal_io: ^2.2.0
+  simple_animations: ^4.1.0
+  sa3_liquid: ^1.0.1
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +35,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  assets:
+    - assets/icons/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

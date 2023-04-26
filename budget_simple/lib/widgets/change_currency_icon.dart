@@ -10,7 +10,7 @@ class ChangeCurrencyIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       const Padding(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 5),
+        padding: EdgeInsets.only(left: 20, right: 20, top: 25, bottom: 5),
         child: TextFont(
           text: "Change Currency Icon",
           fontSize: 30,

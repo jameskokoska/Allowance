@@ -41,9 +41,9 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 5),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 5),
           child: TextFont(
-            text: "Refill Balance",
+            text: "Reset Allowance",
             fontSize: 30,
             fontWeight: FontWeight.bold,
             textAlign: TextAlign.center,
@@ -53,7 +53,7 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: TextFont(
             text:
-                "You should refill your balance when the term ends to stay on top of your spending habits.",
+                "You should reset your allowance when the term ends to stay on top of your spending habits.",
             fontSize: 15,
             maxLines: 4,
             textAlign: TextAlign.center,
@@ -63,7 +63,7 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const TextFont(text: "\$"),
+            TextFont(text: currencyIcon),
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 100),
               child: Padding(
