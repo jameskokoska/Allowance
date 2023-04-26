@@ -41,7 +41,6 @@ class TextFont extends StatelessWidget {
     final TextStyle textStyle = TextStyle(
       fontWeight: fontWeight,
       fontSize: fontSize,
-      fontFamily: 'Avenir',
       color: finalTextColor,
       overflow: overflow,
       decoration: decoration,

@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:budget_simple/struct/databaseGlobal.dart';
+import 'package:budget_simple/struct/functions.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' hide Table;
 import 'package:intl/intl.dart';
+
 export 'platform/shared.dart';
 part 'tables.g.dart';
 
@@ -33,7 +35,16 @@ class Transactions extends Table {
       dateTime().clientDefault(() => DateTime.now())();
 }
 
-@DriftDatabase(tables: [Transactions])
+class SpendingLimit extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  RealColumn get amount => real()();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => DateTime.now())();
+  DateTimeColumn get dateCreatedUntil =>
+      dateTime().clientDefault(() => DateTime.now())();
+}
+
+@DriftDatabase(tables: [Transactions, SpendingLimit])
 class TransactionsDatabase extends _$TransactionsDatabase {
   TransactionsDatabase(QueryExecutor e) : super(e);
 
@@ -60,12 +71,36 @@ class TransactionsDatabase extends _$TransactionsDatabase {
         .watch();
   }
 
+  Stream<SpendingLimitData> watchSpendingLimit() {
+    return (select(spendingLimit)..where((tbl) => tbl.id.equals(1)))
+        .watchSingle();
+  }
+
+  Future<SpendingLimitData> getSpendingLimit() {
+    return (select(spendingLimit)..where((tbl) => tbl.id.equals(1)))
+        .getSingle();
+  }
+
+  Future<int> createOrUpdateSpendingLimit(SpendingLimitData spendingLimit) {
+    if (spendingLimit.amount > MAX_AMOUNT) {
+      spendingLimit = spendingLimit.copyWith(amount: 999999);
+    }
+    return into($SpendingLimitTable(attachedDatabase))
+        .insertOnConflictUpdate(spendingLimit);
+  }
+
+  Stream<double?> totalSpendAfterDay(DateTime day) {
+    final totalAmt = transactions.amount.sum();
+    final JoinedSelectStatement<$TransactionsTable, Transaction> query;
+    query = selectOnly(transactions)
+      ..addColumns([totalAmt])
+      ..where(transactions.dateCreated.isBiggerThanValue(day));
+
+    return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+  }
+
   Future<int> deleteTransaction(id, {BuildContext? context}) async {
-    NumberFormat currency = NumberFormat.currency(
-      decimalDigits: 2,
-      locale: Platform.localeName,
-      symbol: ('\$'),
-    );
+    NumberFormat currency = getNumberFormat();
     if (context != null) {
       Transaction transaction = await getTransaction(id);
       SnackBar snackBar = SnackBar(

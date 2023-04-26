@@ -2,6 +2,6 @@
 import 'package:drift/web.dart';
 import 'package:budget_simple/database/tables.dart';
 
-TransactionsDatabase constructDb() {
-  return TransactionsDatabase(WebDatabase('db', logStatements: false));
+TransactionsDatabase constructDb(String dbName) {
+  return TransactionsDatabase(WebDatabase(dbName, logStatements: false));
 }
