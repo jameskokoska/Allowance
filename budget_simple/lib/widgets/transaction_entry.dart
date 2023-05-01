@@ -1,5 +1,5 @@
 import 'package:budget_simple/database/tables.dart';
-import 'package:budget_simple/struct/databaseGlobal.dart';
+import 'package:budget_simple/struct/database-global.dart';
 import 'package:budget_simple/struct/functions.dart';
 import 'package:intl/intl.dart';
 
@@ -128,6 +128,8 @@ class TransactionEntry extends StatelessWidget {
                                 fontSize: 17,
                                 maxLines: 5,
                                 textAlign: TextAlign.right,
+                                textColor:
+                                    Theme.of(context).colorScheme.tertiary,
                               )
                             : const SizedBox.shrink(),
                       ],

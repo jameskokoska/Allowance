@@ -1,5 +1,6 @@
 import 'package:budget_simple/database/tables.dart';
-import 'package:budget_simple/struct/databaseGlobal.dart';
+import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/widgets/text_font.dart';
 import 'package:budget_simple/widgets/transaction_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:implicitly_animated_list/implicitly_animated_list.dart';
@@ -35,6 +36,7 @@ class TransactionsList extends StatefulWidget {
 class _TransactionsListState extends State<TransactionsList> {
   late ScrollController _scrollController;
   int amountLoaded = DEFAULT_LIMIT;
+  String? searchTerm;
 
   @override
   void initState() {
@@ -58,23 +60,49 @@ class _TransactionsListState extends State<TransactionsList> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Transaction>>(
-      stream: database.watchAllTransactions(limit: amountLoaded),
-      builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          return ImplicitlyAnimatedList(
-            controller: _scrollController,
-            itemData: snapshot.data!,
-            itemBuilder: (_, transaction) => Center(
-              child: TransactionEntry(
-                key: ValueKey(transaction.id),
-                transaction: transaction,
-              ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextField(
+          maxLength: 40,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+            hintText: 'Search Transaction Names',
+            counterText: "",
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
             ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
+          ),
+          onChanged: (value) {
+            setState(() {
+              searchTerm = value == "" ? null : value;
+            });
+          },
+        ),
+        Expanded(
+          child: StreamBuilder<List<Transaction>>(
+            stream: database.watchAllTransactions(
+                limit: amountLoaded, searchTerm: searchTerm),
+            builder: (context, snapshot) {
+              if (snapshot.data != null && snapshot.data!.isEmpty) {
+                return const TextFont(text: "No transactions found");
+              } else if (snapshot.data != null) {
+                return ImplicitlyAnimatedList(
+                  controller: _scrollController,
+                  itemData: snapshot.data!,
+                  itemBuilder: (_, transaction) => Center(
+                    child: TransactionEntry(
+                      key: ValueKey(transaction.id),
+                      transaction: transaction,
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:budget_simple/struct/databaseGlobal.dart';
+import 'package:budget_simple/struct/database-global.dart';
 import 'package:budget_simple/struct/functions.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' hide Table;
@@ -65,8 +65,12 @@ class TransactionsDatabase extends _$TransactionsDatabase {
         .getSingle();
   }
 
-  Stream<List<Transaction>> watchAllTransactions({int? limit}) {
+  Stream<List<Transaction>> watchAllTransactions(
+      {int? limit, String? searchTerm}) {
     return (select(transactions)
+          ..where((tbl) => searchTerm == null
+              ? const Constant(true)
+              : tbl.name.lower().like("%${searchTerm.toLowerCase()}%"))
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT))
         .watch();

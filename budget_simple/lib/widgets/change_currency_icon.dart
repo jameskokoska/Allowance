@@ -1,5 +1,5 @@
 import 'package:budget_simple/main.dart';
-import 'package:budget_simple/struct/databaseGlobal.dart';
+import 'package:budget_simple/struct/database-global.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/material.dart';
 

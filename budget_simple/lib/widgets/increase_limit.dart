@@ -1,5 +1,5 @@
 import 'package:budget_simple/database/tables.dart';
-import 'package:budget_simple/struct/databaseGlobal.dart';
+import 'package:budget_simple/struct/database-global.dart';
 import 'package:budget_simple/widgets/tappable.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/material.dart';
@@ -20,17 +20,30 @@ DateTime dayInAMonth() {
 
 class _IncreaseLimitState extends State<IncreaseLimit> {
   double selectedAmount = 0;
-  DateTime selectedDate = dayInAMonth();
-
-  Future<void> _selectDate(BuildContext context) async {
+  DateTime selectedUntilDate = dayInAMonth();
+  DateTime selectedOnDate = DateTime.now();
+  Future<void> _selectUntilDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime.now().add(const Duration(days: 1)),
+        initialDate: selectedUntilDate,
+        firstDate: DateTime.now().add(const Duration(days: 0)),
         lastDate: DateTime.now().add(const Duration(days: 500)));
-    if (picked != null && picked != selectedDate) {
+    if (picked != null && picked != selectedUntilDate) {
       setState(() {
-        selectedDate = picked;
+        selectedUntilDate = picked;
+      });
+    }
+  }
+
+  Future<void> _selectOnDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedOnDate,
+        firstDate: DateTime.now().add(const Duration(days: -30)),
+        lastDate: DateTime.now());
+    if (picked != null && picked != selectedOnDate) {
+      setState(() {
+        selectedOnDate = picked;
       });
     }
   }
@@ -60,8 +73,11 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          mainAxisSize: MainAxisSize.min,
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          runAlignment: WrapAlignment.center,
+          alignment: WrapAlignment.center,
+          runSpacing: 2,
           children: [
             TextFont(text: currencyIcon),
             ConstrainedBox(
@@ -97,7 +113,7 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
               borderRadius: 15,
               color: Colors.transparent,
               onTap: () {
-                _selectDate(context);
+                _selectUntilDate(context);
               },
               child: Container(
                 padding:
@@ -111,10 +127,41 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
                   ),
                 ),
                 child: TextFont(
-                  text: DateFormat('MMM d, yyyy').format(selectedDate),
+                  text: DateFormat('MMM d, yyyy').format(selectedUntilDate),
                 ),
               ),
             ),
+            const SizedBox(width: 5),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const TextFont(text: "on"),
+                Tappable(
+                  borderRadius: 15,
+                  color: Colors.transparent,
+                  onTap: () {
+                    _selectOnDate(context);
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 14),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: TextFont(
+                      text: DateFormat('MMM d, yyyy').format(selectedOnDate),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 5),
           ],
         ),
         const SizedBox(height: 25),
@@ -144,10 +191,18 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
                         SpendingLimitData(
                           id: 1,
                           amount: selectedAmount,
-                          dateCreated: DateTime.now(),
-                          dateCreatedUntil: selectedDate,
+                          dateCreated: selectedOnDate,
+                          dateCreatedUntil: selectedUntilDate,
                         ),
                       );
+                      dismissedPopupOver = false;
+                      dismissedPopupAchieved = false;
+                      dismissedPopupDoneOver = false;
+                      sharedPreferences.setBool("dismissedPopupOver", false);
+                      sharedPreferences.setBool(
+                          "dismissedPopupAchieved", false);
+                      sharedPreferences.setBool(
+                          "dismissedPopupDoneOver", false);
                       Navigator.pop(context);
                     }
                   },

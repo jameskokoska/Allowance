@@ -1,9 +1,13 @@
 import 'package:budget_simple/database/tables.dart';
+import 'package:budget_simple/main.dart';
 import 'package:budget_simple/pages/home_page.dart';
-import 'package:budget_simple/struct/databaseGlobal.dart';
+import 'package:budget_simple/struct/colors.dart';
+import 'package:budget_simple/struct/database-global.dart';
 import 'package:budget_simple/struct/functions.dart';
-import 'package:budget_simple/widgets/plasma_render.dart';
+import 'package:budget_simple/struct/languages-dict.dart';
+import 'package:budget_simple/widgets/select_color.dart';
 import 'package:budget_simple/widgets/settings_container.dart';
+import 'package:budget_simple/widgets/support_developer.dart';
 import 'package:budget_simple/widgets/tappable.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:budget_simple/widgets/time_digits.dart';
@@ -23,111 +27,10 @@ class AboutPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            kIsWeb
-                ? const SizedBox.shrink()
-                : ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 550),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: Tappable(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .secondaryContainer
-                            .withOpacity(0.7),
-                        onTap: () {},
-                        borderRadius: 15,
-                        child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: PlasmaRender(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer,
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 40),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: TextFont(
-                                            text: "Support the Developer",
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            textAlign: TextAlign.center,
-                                            maxLines: 5,
-                                          ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8),
-                                          child: TextFont(
-                                            text:
-                                                "Buy the developer something off the menu!",
-                                            fontSize: 15,
-                                            textAlign: TextAlign.center,
-                                            maxLines: 5,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 25,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 28.0),
-                                          child: Wrap(
-                                            spacing: 15,
-                                            runSpacing: 10,
-                                            alignment: WrapAlignment.center,
-                                            children: [
-                                              DonationMenuItem(
-                                                  onTap: () {},
-                                                  imagePath:
-                                                      "assets/icons/coffee-cup.png"),
-                                              DonationMenuItem(
-                                                  onTap: () {},
-                                                  imagePath:
-                                                      "assets/icons/cupcake.png"),
-                                              DonationMenuItem(
-                                                  onTap: () {},
-                                                  imagePath:
-                                                      "assets/icons/salad.png"),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+            const SupportDeveloper(),
             kIsWeb ? const SizedBox.shrink() : const Divider(),
             SettingsContainer(
-              title: "Donate",
+              title: kIsWeb ? "Donate" : "Donate Monthly",
               afterWidget: const Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 17,
@@ -160,15 +63,39 @@ class AboutPage extends StatelessWidget {
               },
             ),
             const Divider(),
-            SettingsContainer(
-              title: "Change Currency",
-              afterWidget: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 17,
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                child: SizedBox(
+                  height: 65,
+                  child: SelectColor(
+                    setSelectedColor: (Color? color) {
+                      themeColor = color;
+                      if (color == null) {
+                        sharedPreferences.remove("themeColor");
+                      } else {
+                        sharedPreferences.setString(
+                            "themeColor", colorToString(color) ?? "");
+                      }
+                      initializeAppStateKey.currentState?.refreshAppState();
+                    },
+                    selectedColor: themeColor,
+                  ),
+                ),
               ),
-              icon: Icons.category_outlined,
-              onTap: () {
-                changeCurrencyIconBottomSheet(context);
+            ),
+            SettingsContainerDropdown(
+              icon: Icons.lightbulb_outline,
+              title: "Theme Mode",
+              initial: "System",
+              items: const ["System", "Light", "Dark"],
+              onChanged: (selected) {
+                themeMode = selected;
+                sharedPreferences.setString("themeMode", selected);
+                initializeAppStateKey.currentState?.refreshAppState();
+              },
+              getLabel: (label) {
+                return label;
               },
             ),
             SettingsContainer(
@@ -182,7 +109,38 @@ class AboutPage extends StatelessWidget {
                 addAmountBottomSheet(context);
               },
             ),
-            const NotificationSettings(),
+            SettingsContainer(
+              title: "Change Currency",
+              afterWidget: const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 17,
+              ),
+              icon: Icons.category_outlined,
+              onTap: () {
+                changeCurrencyIconBottomSheet(context);
+              },
+            ),
+            SettingsContainerDropdown(
+              icon: Icons.language,
+              title: "Language",
+              initial: language,
+              items: ["Default", ...languagesDictionary.keys.toList()],
+              onChanged: (selected) {
+                if (selected == "Default") {
+                  language = getDeviceLanguage() ?? "en";
+                  sharedPreferences.remove("language");
+                } else {
+                  language = selected;
+                  sharedPreferences.setString("language", selected);
+                }
+                initializeAppStateKey.currentState?.refreshAppState();
+              },
+              getLabel: (label) {
+                if (label == "Default") return "Default";
+                return languagesDictionary[label] ?? "English";
+              },
+            ),
+            kIsWeb ? const SizedBox.shrink() : const NotificationSettings(),
             const Divider(),
             const SizedBox(height: 10),
             const AboutInfoBox(
@@ -249,49 +207,45 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        kIsWeb
-            ? const SizedBox.shrink()
-            : SettingsContainerSwitch(
-                title: "Daily Notifications",
-                onSwitched: (value) {
-                  setState(() {
-                    notificationsEnabled = value;
-                    notifications = value;
-                    sharedPreferences.setBool("notifications", value);
-                  });
-                },
-                initialValue: notificationsEnabled,
-                icon: Icons.notifications_outlined,
-              ),
-        kIsWeb
-            ? const SizedBox.shrink()
-            : AnimatedSize(
-                duration: const Duration(milliseconds: 900),
-                curve: Curves.elasticOut,
-                child: notificationsEnabled
-                    ? SettingsContainer(
-                        title: "Daily Notifications",
-                        afterWidget: TimeDigits(
-                          timeOfDay: timeOfDay,
-                        ),
-                        icon: Icons.alarm_outlined,
-                        onTap: () async {
-                          TimeOfDay newTime = await showTimePicker(
-                                context: context,
-                                initialTime: timeOfDay,
-                                initialEntryMode: TimePickerEntryMode.input,
-                                helpText: "",
-                              ) ??
-                              TimeOfDay.now();
-                          timeOfDay = newTime;
-                          notificationsTime = newTime;
-                          sharedPreferences.setString("notificationsTime",
-                              "${newTime.hour}:${newTime.minute}");
-                          setState(() {});
-                        },
-                      )
-                    : Container(),
-              ),
+        SettingsContainerSwitch(
+          title: "Daily Notifications",
+          onSwitched: (value) {
+            setState(() {
+              notificationsEnabled = value;
+              notifications = value;
+              sharedPreferences.setBool("notifications", value);
+            });
+          },
+          initialValue: notificationsEnabled,
+          icon: Icons.notifications_outlined,
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 900),
+          curve: Curves.elasticOut,
+          child: notificationsEnabled
+              ? SettingsContainer(
+                  title: "Notification Time",
+                  afterWidget: TimeDigits(
+                    timeOfDay: timeOfDay,
+                  ),
+                  icon: Icons.alarm_outlined,
+                  onTap: () async {
+                    TimeOfDay? newTime = await showTimePicker(
+                      context: context,
+                      initialTime: timeOfDay,
+                      initialEntryMode: TimePickerEntryMode.input,
+                      helpText: "",
+                    );
+                    if (newTime == null) return;
+                    timeOfDay = newTime;
+                    notificationsTime = newTime;
+                    sharedPreferences.setString("notificationsTime",
+                        "${newTime.hour}:${newTime.minute}");
+                    setState(() {});
+                  },
+                )
+              : Container(),
+        ),
       ],
     );
   }

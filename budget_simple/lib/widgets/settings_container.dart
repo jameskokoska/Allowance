@@ -1,3 +1,4 @@
+import 'package:budget_simple/widgets/dropdown_select.dart';
 import 'package:budget_simple/widgets/tappable.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/material.dart';
@@ -222,6 +223,50 @@ class SettingsHeader extends StatelessWidget {
         fontSize: 15,
         fontWeight: FontWeight.bold,
         textColor: Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+}
+
+class SettingsContainerDropdown extends StatelessWidget {
+  const SettingsContainerDropdown({
+    Key? key,
+    required this.title,
+    this.description,
+    this.icon,
+    required this.initial,
+    required this.items,
+    required this.onChanged,
+    this.verticalPadding,
+    required this.getLabel,
+  }) : super(key: key);
+
+  final String title;
+  final String? description;
+  final IconData? icon;
+  final String initial;
+  final List<String> items;
+  final Function(String) onChanged;
+  final double? verticalPadding;
+  final String Function(dynamic) getLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainer(
+      verticalPadding: verticalPadding,
+      title: title,
+      description: description,
+      icon: icon,
+      afterWidget: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: DropdownSelect(
+          compact: true,
+          initial: items.contains(initial) == false ? items[0] : initial,
+          items: items,
+          onChanged: onChanged,
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          getLabel: getLabel,
+        ),
       ),
     );
   }
