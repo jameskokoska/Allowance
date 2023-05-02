@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/functions.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' hide Table;

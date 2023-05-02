@@ -1,5 +1,5 @@
 import 'package:budget_simple/main.dart';
-import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +24,17 @@ class ChangeCurrencyIcon extends StatelessWidget {
           decoration: InputDecoration(
             hintText: currencyIcon,
             counterText: "",
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 14,
+            ),
           ),
           autofocus: true,
           onFieldSubmitted: (value) {
+            currencyIcon = value;
+            if (value.trim() == "") {
+              currencyIcon = "\$";
+            }
             sharedPreferences.setString("currencyIcon", value);
             initializeAppStateKey.currentState?.refreshAppState();
             Navigator.pop(context);

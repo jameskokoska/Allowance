@@ -1,5 +1,5 @@
 import 'package:budget_simple/database/tables.dart';
-import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:budget_simple/widgets/transaction_entry.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +85,13 @@ class _TransactionsListState extends State<TransactionsList> {
                 limit: amountLoaded, searchTerm: searchTerm),
             builder: (context, snapshot) {
               if (snapshot.data != null && snapshot.data!.isEmpty) {
-                return const TextFont(text: "No transactions found");
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                  child: TextFont(
+                    text: "No transactions found",
+                    fontSize: 16,
+                  ),
+                );
               } else if (snapshot.data != null) {
                 return ImplicitlyAnimatedList(
                   controller: _scrollController,

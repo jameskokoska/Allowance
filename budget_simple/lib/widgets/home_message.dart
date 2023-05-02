@@ -68,7 +68,7 @@ class HomeMessage extends StatelessWidget {
                                   TextFont(
                                     fontSize: 15,
                                     text: message,
-                                    maxLines: 3,
+                                    maxLines: 50,
                                   )
                                 ],
                               ),

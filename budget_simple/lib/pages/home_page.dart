@@ -1,8 +1,9 @@
 import 'package:budget_simple/main.dart';
 import 'package:budget_simple/pages/about_page.dart';
 import 'package:budget_simple/pages/transactions_history_page.dart';
-import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/functions.dart';
+import 'package:budget_simple/struct/notifications.dart';
 import 'package:budget_simple/widgets/amount_button.dart';
 import 'package:budget_simple/widgets/change_currency_icon.dart';
 import 'package:budget_simple/widgets/home_message.dart';
@@ -14,6 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:budget_simple/database/tables.dart';
+
+initializeAppWithUI(BuildContext context) async {
+  await setDailyNotificationOnLaunch(context);
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,6 +37,12 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _textController = TextEditingController(text: "");
+    Future.delayed(
+      const Duration(milliseconds: 0),
+      () {
+        initializeAppWithUI(context);
+      },
+    );
   }
 
   removeAllAmount() {

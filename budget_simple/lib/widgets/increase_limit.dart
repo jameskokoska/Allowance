@@ -1,5 +1,5 @@
 import 'package:budget_simple/database/tables.dart';
-import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/widgets/tappable.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/material.dart';
@@ -100,6 +100,10 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
                     keyboardType: TextInputType.number,
                     style: const TextStyle(fontSize: 20),
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 14,
+                      ),
                       hintText: "0",
                     ),
                   ),

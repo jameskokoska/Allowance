@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:budget_simple/pages/home_page.dart';
+import 'package:budget_simple/pages/on_board.dart';
 import 'package:budget_simple/struct/colors.dart';
-import 'package:budget_simple/struct/database-global.dart';
-import 'package:budget_simple/struct/languages-dict.dart';
+import 'package:budget_simple/struct/database_global.dart';
+import 'package:budget_simple/struct/languages_dict.dart';
+import 'package:budget_simple/struct/notifications.dart';
 import 'package:budget_simple/widgets/increase_limit.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -15,8 +17,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /*
 TODO: Translations
-TODO: Onboarding - set up initial spending limit, currency icon
-TODO: Notifications
 TODO: ratings, IAP
 TODO: host on firebase
 
@@ -49,6 +49,7 @@ void main() async {
   }
   sharedPreferences = await SharedPreferences.getInstance();
   packageInfoGlobal = await PackageInfo.fromPlatform();
+  String? notificationPayload = await initializeNotifications();
   setSettings();
   runApp(
     DevicePreview(
@@ -77,6 +78,7 @@ setSettings() {
       sharedPreferences.getBool("dismissedPopupDoneOver") ?? false;
   numberLogins = sharedPreferences.getInt("numberLogins") ?? 0;
   sharedPreferences.setInt("numberLogins", numberLogins + 1);
+  hasOnboarded = sharedPreferences.getBool("hasOnboarded") ?? false;
   print(numberLogins);
 }
 
@@ -145,9 +147,39 @@ class App extends StatelessWidget {
           : themeMode == "Dark"
               ? ThemeMode.dark
               : ThemeMode.system,
-      home: const SafeArea(
+      home: SafeArea(
         top: false,
-        child: HomePage(),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 1200),
+          switchInCurve: Curves.easeInOutCubic,
+          switchOutCurve: Curves.easeInOutCubic,
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            final inAnimation = Tween<Offset>(
+                    begin: const Offset(-1.0, 0.0), end: const Offset(0.0, 0.0))
+                .animate(animation);
+            final outAnimation = Tween<Offset>(
+                    begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0))
+                .animate(animation);
+
+            if (child.key == const ValueKey("Onboarding")) {
+              return ClipRect(
+                child: SlideTransition(
+                  position: inAnimation,
+                  child: child,
+                ),
+              );
+            } else {
+              return ClipRect(
+                child: SlideTransition(position: outAnimation, child: child),
+              );
+            }
+          },
+          child: hasOnboarded == false
+              ? const OnBoardingPage(
+                  key: ValueKey("Onboarding"),
+                )
+              : const HomePage(),
+        ),
       ),
       scrollBehavior: ScrollBehavior(),
     );

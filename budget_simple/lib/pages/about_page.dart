@@ -2,9 +2,10 @@ import 'package:budget_simple/database/tables.dart';
 import 'package:budget_simple/main.dart';
 import 'package:budget_simple/pages/home_page.dart';
 import 'package:budget_simple/struct/colors.dart';
-import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/functions.dart';
-import 'package:budget_simple/struct/languages-dict.dart';
+import 'package:budget_simple/struct/languages_dict.dart';
+import 'package:budget_simple/struct/notifications.dart';
 import 'package:budget_simple/widgets/select_color.dart';
 import 'package:budget_simple/widgets/settings_container.dart';
 import 'package:budget_simple/widgets/support_developer.dart';
@@ -148,16 +149,24 @@ class AboutPage extends StatelessWidget {
               link: "https://dribbble.com/shots/20474761-Simple-budgeting-app",
             ),
             const AboutInfoBox(
-              title: "Icons from FlatIcon by FreePik",
-              link: "https://www.flaticon.com/",
-            ),
-            const AboutInfoBox(
               title: "Flutter",
               link: "https://flutter.dev/",
             ),
             const AboutInfoBox(
               title: "Drift SQL Database",
               link: "https://drift.simonbinder.eu/",
+            ),
+            const AboutInfoBox(
+              title: "Icons from FlatIcon by FreePik",
+              link: "https://www.flaticon.com/",
+            ),
+            const AboutInfoBox(
+              title: "Onboarding Images from FlatIcon by pch.vector",
+              link: "https://www.freepik.com/author/pch-vector",
+            ),
+            const AboutInfoBox(
+              title: "Onboarding Images from FlatIcon by mamewmy",
+              link: "https://www.freepik.com/author/mamewmy",
             ),
             const SizedBox(height: 10),
             Row(
@@ -215,6 +224,11 @@ class _NotificationSettingsState extends State<NotificationSettings> {
               notifications = value;
               sharedPreferences.setBool("notifications", value);
             });
+            if (value) {
+              setDailyNotificationOnLaunch(context);
+            } else {
+              cancelDailyNotification();
+            }
           },
           initialValue: notificationsEnabled,
           icon: Icons.notifications_outlined,

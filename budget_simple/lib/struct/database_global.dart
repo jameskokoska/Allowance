@@ -20,3 +20,4 @@ late bool dismissedPopupOver;
 late bool dismissedPopupAchieved;
 late bool dismissedPopupDoneOver;
 late int numberLogins;
+late bool hasOnboarded;

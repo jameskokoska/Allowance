@@ -1,5 +1,5 @@
 import 'package:budget_simple/database/tables.dart';
-import 'package:budget_simple/struct/database-global.dart';
+import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/functions.dart';
 import 'package:intl/intl.dart';
 
