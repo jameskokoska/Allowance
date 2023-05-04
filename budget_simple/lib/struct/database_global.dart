@@ -21,3 +21,4 @@ late bool dismissedPopupAchieved;
 late bool dismissedPopupDoneOver;
 late int numberLogins;
 late bool hasOnboarded;
+late Map<String, dynamic> dataSetTranslationsApp;

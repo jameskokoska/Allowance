@@ -60,6 +60,7 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
             fontSize: 30,
             fontWeight: FontWeight.bold,
             textAlign: TextAlign.center,
+            maxLines: 3,
           ),
         ),
         const Padding(
@@ -68,7 +69,7 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
             text:
                 "You should reset your allowance when the term ends to stay on top of your spending habits.",
             fontSize: 15,
-            maxLines: 4,
+            maxLines: 8,
             textAlign: TextAlign.center,
           ),
         ),

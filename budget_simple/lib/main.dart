@@ -6,6 +6,7 @@ import 'package:budget_simple/struct/colors.dart';
 import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/languages_dict.dart';
 import 'package:budget_simple/struct/notifications.dart';
+import 'package:budget_simple/struct/translations.dart';
 import 'package:budget_simple/widgets/increase_limit.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -18,16 +19,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 /*
 TODO: Translations
 TODO: ratings, IAP
-TODO: host on firebase
-
-adb tcpip 5555
-adb connect 192.168.0.22
-
-flutter channel master
-flutter upgrade
 
 flutter build appbundle --release
 
+firebase deploy
 */
 
 void main() async {
@@ -51,6 +46,7 @@ void main() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();
   String? notificationPayload = await initializeNotifications();
   setSettings();
+  dataSetTranslationsApp = await openAppTranslations();
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,

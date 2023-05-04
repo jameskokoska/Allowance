@@ -41,3 +41,4 @@ flutter:
   assets:
     - assets/icons/
     - assets/onboard/
+    - assets/translations/translationsAppKeyed.json

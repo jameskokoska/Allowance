@@ -10,6 +10,7 @@ class DropdownSelect extends StatefulWidget {
   final bool
       checkInitialValue; //Check if the initial value not in list, default to using the first index
   final String Function(dynamic) getLabel;
+  final bool translate;
 
   const DropdownSelect({
     Key? key,
@@ -20,6 +21,7 @@ class DropdownSelect extends StatefulWidget {
     this.compact = false,
     this.checkInitialValue = false,
     required this.getLabel,
+    this.translate = true,
   }) : super(key: key);
 
   @override
@@ -75,6 +77,7 @@ class _DropdownSelectState extends State<DropdownSelect> {
             child: TextFont(
               text: widget.getLabel(value),
               fontSize: widget.compact ? 14 : 18,
+              translate: widget.translate,
             ),
           );
         }).toList(),

@@ -4,6 +4,7 @@ import 'package:budget_simple/pages/transactions_history_page.dart';
 import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/functions.dart';
 import 'package:budget_simple/struct/notifications.dart';
+import 'package:budget_simple/struct/translations.dart';
 import 'package:budget_simple/widgets/amount_button.dart';
 import 'package:budget_simple/widgets/change_currency_icon.dart';
 import 'package:budget_simple/widgets/home_message.dart';
@@ -77,9 +78,10 @@ class HomePageState extends State<HomePage> {
         );
         HapticFeedback.heavyImpact();
         SnackBar snackBar = SnackBar(
-          content: Text('Added $formattedOutput transaction'),
+          content: Text(
+              '${translateText("Added")} $formattedOutput ${translateText("transaction")}'),
           action: SnackBarAction(
-            label: 'Undo',
+            label: translateText('Undo').capitalizeFirstofEach,
             onPressed: () {
               database.deleteTransaction(transactionAdded, context: context);
             },
@@ -89,8 +91,8 @@ class HomePageState extends State<HomePage> {
         removeAllAmount();
       } else {
         if (showedWarningSnackbar == false) {
-          const snackBar = SnackBar(
-            content: Text('Enter an amount'),
+          final snackBar = SnackBar(
+            content: Text(translateText('Enter an amount')),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           showedWarningSnackbar = true;
@@ -245,13 +247,14 @@ class HomePageState extends State<HomePage> {
                                       minFontSize: 15,
                                       maxFontSize: 55,
                                       maxLines: 2,
+                                      translate: false,
                                     ),
                                   ),
                                 ),
                               ),
                               TextFont(
                                 text:
-                                    "${currency.format(amount.abs() / moreDays)}/day for $moreDays more ${moreDays == 1 ? "day" : "days"}",
+                                    "${currency.format(amount.abs() / moreDays)}/${translateText("day")} ${translateText("for")} $moreDays ${translateText("more")} ${moreDays == 1 ? translateText("day") : translateText("days")}",
                                 fontSize: 17,
                                 maxLines: 3,
                                 textAlign: TextAlign.center,
@@ -267,7 +270,7 @@ class HomePageState extends State<HomePage> {
                                         child: TextFont(
                                           key: ValueKey(amount),
                                           text:
-                                              "${currency.format(amount.abs())} overspent",
+                                              "${currency.format(amount.abs())} ${translateText("overspent")}",
                                           textColor: Theme.of(context)
                                               .colorScheme
                                               .error,
@@ -367,7 +370,7 @@ class HomePageState extends State<HomePage> {
       maxLength: 40,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-        hintText: 'Transaction Name',
+        hintText: translateText('Transaction Name'),
         counterText: "",
         hintStyle: TextStyle(
           color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),

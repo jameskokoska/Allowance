@@ -1,5 +1,6 @@
 import 'package:budget_simple/database/tables.dart';
 import 'package:budget_simple/struct/database_global.dart';
+import 'package:budget_simple/struct/translations.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:budget_simple/widgets/transaction_entry.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class TransactionsHistoryPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Transactions"),
+        title: const TextFont(text: "Transactions"),
       ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
@@ -67,7 +68,7 @@ class _TransactionsListState extends State<TransactionsList> {
           maxLength: 40,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            hintText: 'Search Transaction Names',
+            hintText: translateText('Search Transaction Names'),
             counterText: "",
             hintStyle: TextStyle(
               color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:budget_simple/struct/translations.dart';
 import 'package:flutter/material.dart';
 
 class TextFont extends StatelessWidget {
@@ -17,6 +18,7 @@ class TextFont extends StatelessWidget {
   final bool autoSizeText;
   final double? minFontSize;
   final double? maxFontSize;
+  final bool translate;
 
   const TextFont({
     Key? key,
@@ -35,6 +37,7 @@ class TextFont extends StatelessWidget {
     this.autoSizeText = false,
     this.maxFontSize,
     this.minFontSize,
+    this.translate = true,
   }) : super(key: key);
 
   @override
@@ -55,9 +58,13 @@ class TextFont extends StatelessWidget {
       decorationThickness: 2,
       height: 1.1,
     );
+    String textToShow = filter != null ? filter!(text) : text;
+    if (translate) {
+      textToShow = translateText(textToShow);
+    }
     return autoSizeText
         ? AutoSizeText(
-            filter != null ? filter!(text) : text,
+            textToShow,
             maxLines: maxLines,
             textAlign: textAlign,
             overflow: overflow ?? TextOverflow.ellipsis,
@@ -67,7 +74,7 @@ class TextFont extends StatelessWidget {
             maxFontSize: maxFontSize ?? fontSize + 10,
           )
         : Text(
-            filter != null ? filter!(text) : text,
+            textToShow,
             maxLines: maxLines,
             textAlign: textAlign,
             overflow: overflow ?? TextOverflow.ellipsis,

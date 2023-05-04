@@ -239,6 +239,7 @@ class SettingsContainerDropdown extends StatelessWidget {
     required this.onChanged,
     this.verticalPadding,
     required this.getLabel,
+    this.translate = true,
   }) : super(key: key);
 
   final String title;
@@ -249,6 +250,7 @@ class SettingsContainerDropdown extends StatelessWidget {
   final Function(String) onChanged;
   final double? verticalPadding;
   final String Function(dynamic) getLabel;
+  final bool translate;
 
   @override
   Widget build(BuildContext context) {
@@ -266,6 +268,7 @@ class SettingsContainerDropdown extends StatelessWidget {
           onChanged: onChanged,
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           getLabel: getLabel,
+          translate: translate,
         ),
       ),
     );

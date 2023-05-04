@@ -6,6 +6,7 @@ import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/functions.dart';
 import 'package:budget_simple/struct/languages_dict.dart';
 import 'package:budget_simple/struct/notifications.dart';
+import 'package:budget_simple/struct/translations.dart';
 import 'package:budget_simple/widgets/select_color.dart';
 import 'package:budget_simple/widgets/settings_container.dart';
 import 'package:budget_simple/widgets/support_developer.dart';
@@ -53,7 +54,7 @@ class AboutPage extends StatelessWidget {
                     onTap: () {},
                   ),
             SettingsContainer(
-              title: "'Allowance' is Open Source!",
+              title: "Allowance is Open Source!",
               afterWidget: const Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 17,
@@ -122,6 +123,7 @@ class AboutPage extends StatelessWidget {
               },
             ),
             SettingsContainerDropdown(
+              translate: false,
               icon: Icons.language,
               title: "Language",
               initial: language,
@@ -137,7 +139,7 @@ class AboutPage extends StatelessWidget {
                 initializeAppStateKey.currentState?.refreshAppState();
               },
               getLabel: (label) {
-                if (label == "Default") return "Default";
+                if (label == "Default") return translateText("Default");
                 return languagesDictionary[label] ?? "English";
               },
             ),
@@ -157,7 +159,7 @@ class AboutPage extends StatelessWidget {
               link: "https://drift.simonbinder.eu/",
             ),
             const AboutInfoBox(
-              title: "Icons from FlatIcon by FreePik",
+              title: "Icons from FlatIcon by Freepik",
               link: "https://www.flaticon.com/",
             ),
             const AboutInfoBox(
@@ -256,6 +258,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                     sharedPreferences.setString("notificationsTime",
                         "${newTime.hour}:${newTime.minute}");
                     setState(() {});
+                    setDailyNotificationOnLaunch(context);
                   },
                 )
               : Container(),

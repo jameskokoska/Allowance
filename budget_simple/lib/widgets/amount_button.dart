@@ -55,6 +55,7 @@ class AmountButton extends StatelessWidget {
                     text: text,
                     textColor:
                         Theme.of(context).colorScheme.onSecondaryContainer,
+                    translate: false,
                   ),
                 ),
           ),
