@@ -17,7 +17,6 @@ import 'package:budget_simple/database/tables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*
-TODO: Translations
 TODO: ratings, IAP
 
 flutter build appbundle --release
