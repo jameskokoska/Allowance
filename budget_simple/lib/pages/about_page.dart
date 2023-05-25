@@ -15,6 +15,7 @@ import 'package:budget_simple/widgets/text_font.dart';
 import 'package:budget_simple/widgets/time_digits.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -30,18 +31,6 @@ class AboutPage extends StatelessWidget {
         child: Column(
           children: [
             const SupportDeveloper(),
-            kIsWeb ? const SizedBox.shrink() : const Divider(),
-            SettingsContainer(
-              title: kIsWeb ? "Donate" : "Donate Monthly",
-              afterWidget: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 17,
-              ),
-              icon: Icons.thumb_up_alt_outlined,
-              onTap: () {
-                kIsWeb ? openUrl("https://ko-fi.com/dapperappdeveloper") : null;
-              },
-            ),
             kIsWeb
                 ? const SizedBox.shrink()
                 : SettingsContainer(
@@ -51,7 +40,12 @@ class AboutPage extends StatelessWidget {
                       size: 17,
                     ),
                     icon: Icons.star_border,
-                    onTap: () {},
+                    onTap: () async {
+                      final InAppReview inAppReview = InAppReview.instance;
+                      if (await inAppReview.isAvailable()) {
+                        inAppReview.requestReview();
+                      }
+                    },
                   ),
             SettingsContainer(
               title: "Allowance is Open Source!",
@@ -269,10 +263,15 @@ class _NotificationSettingsState extends State<NotificationSettings> {
 }
 
 class DonationMenuItem extends StatelessWidget {
-  const DonationMenuItem(
-      {super.key, required this.onTap, required this.imagePath});
+  const DonationMenuItem({
+    super.key,
+    required this.onTap,
+    required this.imagePath,
+    required this.subheader,
+  });
   final String imagePath;
   final VoidCallback onTap;
+  final String subheader;
 
   @override
   Widget build(BuildContext context) {
@@ -282,11 +281,28 @@ class DonationMenuItem extends StatelessWidget {
       borderRadius: 20,
       child: Padding(
         padding: const EdgeInsets.all(13),
-        child: SizedBox(
-          width: 60,
-          child: Image(
-            image: AssetImage(imagePath),
-          ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 2,
+            ),
+            SizedBox(
+              width: 60,
+              child: Image(
+                image: AssetImage(imagePath),
+              ),
+            ),
+            const SizedBox(
+              height: 11,
+            ),
+            TextFont(
+              text: subheader,
+              fontSize: 13,
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+          ],
         ),
       ),
     );

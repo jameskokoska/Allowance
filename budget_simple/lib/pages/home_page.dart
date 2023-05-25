@@ -515,7 +515,11 @@ class HomePageState extends State<HomePage> {
                   children: [
                     const SizedBox(height: 5),
                     topHeaderWidget,
-                    numberLogins == 6
+                    numberLogins == 8 ||
+                            numberLogins == 17 ||
+                            numberLogins == 30 ||
+                            numberLogins == 50 ||
+                            numberLogins == 100
                         ? const SupportDeveloper(
                             showCloseButton: true,
                           )

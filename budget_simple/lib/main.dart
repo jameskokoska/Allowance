@@ -15,10 +15,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:budget_simple/database/tables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 /*
-TODO: ratings, IAP
-
 flutter build appbundle --release
 
 firebase deploy
@@ -54,7 +53,7 @@ void main() async {
   );
 }
 
-setSettings() {
+setSettings() async {
   currencyIcon = sharedPreferences.getString("currencyIcon") ?? "\$";
   notifications = sharedPreferences.getBool("notifications") ?? true;
   String notificationsTimeStr =
@@ -75,6 +74,14 @@ setSettings() {
   sharedPreferences.setInt("numberLogins", numberLogins + 1);
   hasOnboarded = sharedPreferences.getBool("hasOnboarded") ?? false;
   print(numberLogins);
+  if (!kIsWeb) {
+    if (numberLogins == 6 || numberLogins == 15) {
+      final InAppReview inAppReview = InAppReview.instance;
+      if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+      }
+    }
+  }
 }
 
 GlobalKey<_InitializeAppState> initializeAppStateKey = GlobalKey();
