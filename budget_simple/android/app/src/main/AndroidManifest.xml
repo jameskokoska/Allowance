@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.budget_simple">
+    package="com.budget.allowance">
   <queries>
     <!-- If your app opens https URLs -->
     <intent>

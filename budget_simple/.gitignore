@@ -47,3 +47,9 @@ app.*.map.json
 ./firebase
 /.firebase
 .firebase/
+
+# Keys
+/android/key.properties
+/android/app/keystore.jks
+key.properties
+keystore.jks
