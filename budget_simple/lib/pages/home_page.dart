@@ -581,9 +581,9 @@ class BottomClipper extends CustomClipper<Rect> {
   Rect getClip(Size size) {
     return Rect.fromLTRB(
       0.0,
-      size.height,
+      size.height - 250,
       size.width,
-      -250,
+      size.height,
     );
   }
 

@@ -47,6 +47,21 @@ class AboutPage extends StatelessWidget {
                       }
                     },
                   ),
+            kIsWeb
+                ? SettingsContainer(
+                    title: "Donate",
+                    afterWidget: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 17,
+                    ),
+                    icon: Icons.thumb_up_alt_outlined,
+                    onTap: () {
+                      kIsWeb
+                          ? openUrl("https://ko-fi.com/dapperappdeveloper")
+                          : null;
+                    },
+                  )
+                : const SizedBox.shrink(),
             SettingsContainer(
               title: "Allowance is Open Source!",
               afterWidget: const Icon(

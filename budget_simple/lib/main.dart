@@ -73,7 +73,7 @@ setSettings() async {
   numberLogins = sharedPreferences.getInt("numberLogins") ?? 0;
   sharedPreferences.setInt("numberLogins", numberLogins + 1);
   hasOnboarded = sharedPreferences.getBool("hasOnboarded") ?? false;
-  print(numberLogins);
+  // print(numberLogins);
   if (!kIsWeb) {
     if (numberLogins == 6 || numberLogins == 15) {
       final InAppReview inAppReview = InAppReview.instance;
@@ -96,7 +96,7 @@ class InitializeApp extends StatefulWidget {
 class _InitializeAppState extends State<InitializeApp> {
   void refreshAppState() {
     setState(() {});
-    print("Rebuilt");
+    // print("Rebuilt");
     rebuildAllChildren(context);
   }
 
@@ -120,7 +120,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      useInheritedMediaQuery: true,
+      // useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       themeAnimationDuration: const Duration(milliseconds: 1000),

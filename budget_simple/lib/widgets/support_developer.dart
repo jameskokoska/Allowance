@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:budget_simple/struct/functions.dart';
+import 'package:budget_simple/struct/translations.dart';
 
 class SupportDeveloper extends StatefulWidget {
   const SupportDeveloper({super.key, this.showCloseButton = false});
@@ -20,57 +21,59 @@ class SupportDeveloper extends StatefulWidget {
 }
 
 class _SupportDeveloperState extends State<SupportDeveloper> {
-  late StreamSubscription<List<PurchaseDetails>> _subscription;
+  StreamSubscription<List<PurchaseDetails>>? _subscription;
   Map<String, ProductDetails> products = {};
   bool closed = false;
   bool storeAvailable = false;
 
   @override
   void initState() {
-    Stream<List<PurchaseDetails>> purchaseUpdated =
-        InAppPurchase.instance.purchaseStream;
-    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      _listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _subscription.cancel();
-    }, onError: (error) {
-      // handle error here.
-    });
-    Future.delayed(const Duration(milliseconds: 0), () async {
-      final bool available = await InAppPurchase.instance.isAvailable();
-      setState(() {
-        closed = !available;
+    if (!kIsWeb) {
+      Stream<List<PurchaseDetails>> purchaseUpdated =
+          InAppPurchase.instance.purchaseStream;
+      _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+        _listenToPurchaseUpdated(purchaseDetailsList, context);
+      }, onDone: () {
+        _subscription?.cancel();
+      }, onError: (error) {
+        // handle error here.
       });
-      if (available) {
-        const Set<String> kIds = <String>{
-          'coffee',
-          'cake',
-          'meal',
-          'subscription',
-        };
-        final ProductDetailsResponse response =
-            await InAppPurchase.instance.queryProductDetails(kIds);
-        if (response.notFoundIDs.isNotEmpty) {
-          setState(() {
-            closed = true;
-          });
-        } else {
-          Map<String, ProductDetails> productMap = {
-            for (var product in response.productDetails) product.id: product
+      Future.delayed(const Duration(milliseconds: 0), () async {
+        final bool available = await InAppPurchase.instance.isAvailable();
+        setState(() {
+          closed = !available;
+        });
+        if (available) {
+          const Set<String> kIds = <String>{
+            'coffee',
+            'cake',
+            'meal',
+            'subscription',
           };
-          inspect(response.productDetails);
-          setState(() {
-            products = productMap;
-          });
+          final ProductDetailsResponse response =
+              await InAppPurchase.instance.queryProductDetails(kIds);
+          if (response.notFoundIDs.isNotEmpty) {
+            setState(() {
+              closed = true;
+            });
+          } else {
+            Map<String, ProductDetails> productMap = {
+              for (var product in response.productDetails) product.id: product
+            };
+            inspect(response.productDetails);
+            setState(() {
+              products = productMap;
+            });
+          }
         }
-      }
-    });
+      });
+    }
     super.initState();
   }
 
   @override
   void dispose() {
-    _subscription.cancel();
+    _subscription?.cancel();
     super.dispose();
   }
 
@@ -247,29 +250,24 @@ class _SupportDeveloperState extends State<SupportDeveloper> {
                         ),
                 ),
               ),
-              kIsWeb || widget.showCloseButton
+              widget.showCloseButton
                   ? const SizedBox.shrink()
                   : const Divider(),
               widget.showCloseButton
                   ? const SizedBox.shrink()
                   : SettingsContainer(
-                      title: kIsWeb ? "Donate" : "Donate Monthly",
+                      title: "Donate Monthly",
                       afterWidget: const Icon(
                         Icons.arrow_forward_ios_rounded,
                         size: 17,
                       ),
                       icon: Icons.thumb_up_alt_outlined,
                       onTap: () {
-                        kIsWeb
-                            ? openUrl("https://ko-fi.com/dapperappdeveloper")
-                            : null;
-                        if (!kIsWeb) {
-                          InAppPurchase.instance.buyConsumable(
-                            purchaseParam: PurchaseParam(
-                              productDetails: products["subscription"]!,
-                            ),
-                          );
-                        }
+                        InAppPurchase.instance.buyConsumable(
+                          purchaseParam: PurchaseParam(
+                            productDetails: products["subscription"]!,
+                          ),
+                        );
                       },
                     ),
             ],
@@ -277,17 +275,24 @@ class _SupportDeveloperState extends State<SupportDeveloper> {
   }
 }
 
-void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+void _listenToPurchaseUpdated(
+    List<PurchaseDetails> purchaseDetailsList, BuildContext context) {
   // ignore: avoid_function_literals_in_foreach_calls
   purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
     if (purchaseDetails.status == PurchaseStatus.pending) {
-      print("LOADING");
+      // print("LOADING");
     } else {
-      if (purchaseDetails.status == PurchaseStatus.error) {
-        print("Error");
-      } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-          purchaseDetails.status == PurchaseStatus.restored) {
-        print("Success");
+      if (purchaseDetails.status == PurchaseStatus.error ||
+          purchaseDetails.status == PurchaseStatus.canceled) {
+        SnackBar snackBar = const SnackBar(
+          content: Text('There was an error. Please try again later.'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else if (purchaseDetails.status == PurchaseStatus.purchased) {
+        SnackBar snackBar = const SnackBar(
+          content: Text('Thank you for supporting Allowance!'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
       if (purchaseDetails.pendingCompletePurchase) {
         await InAppPurchase.instance.completePurchase(purchaseDetails);
