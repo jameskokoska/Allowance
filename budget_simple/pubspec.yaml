@@ -2,7 +2,7 @@ name: budget_simple
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.5+3
+version: 1.1.0+4
 
 environment:
   sdk: '>=2.19.0-444.0.dev <3.0.0'
