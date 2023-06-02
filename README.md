@@ -13,7 +13,12 @@
 </a>
 
 ## Overview
-Allowance is a budget tracking app built using Flutter, Dart, and SQL. It allows users to set a spending goal for a given period of time, track their transactions, and adjust their budget for future terms. The Web App can be accessed here: [https://allowance-track.web.app/](https://allowance-track.web.app/) and the Android app can be accessed here: [https://play.google.com/store/apps/details?id=com.budget.allowance](https://play.google.com/store/apps/details?id=com.budget.allowance)
+Allowance uses a calculator-like interface to let you track your spending habits in a unique and simple way. Discover a budget that works for you and narrow down extra spending habits. It is built using Flutter, Dart, and SQL.
+
+
+| ![Screenshot 1](promotional/Frame1.png) | ![Screenshot 2](promotional/Frame2.png) | ![Screenshot 3](promotional/Frame3.png) |
+| ------------- | ------------- | ------------- |
+| ![Screenshot 4](promotional/Frame4.png) | ![Screenshot 5](promotional/Frame5.png) |  |
 
 ## Features
 - Set a spending goal for a given period of time
