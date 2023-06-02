@@ -1,14 +1,19 @@
 <h1 align="center" style="font-size:28px; line-height:1"><b>Allowance</b></h1>
 
-<a href="https://allowance-track.web.app/">
+<a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
   <div align="center">
     <img alt="Icon" src="promotional/icon.png" width="150px">
   </div>
 </a>
 
+<a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
+  <div align="center">
+    <img alt="Icon" src="Promotional/google-play-badge.png" width="200px">
+  </div>
+</a>
+
 ## Overview
 Allowance is a budget tracking app built using Flutter, Dart, and SQL. It allows users to set a spending goal for a given period of time, track their transactions, and adjust their budget for future terms. The Web App can be accessed here: [https://allowance-track.web.app/](https://allowance-track.web.app/) and the Android app can be accessed here: [https://play.google.com/store/apps/details?id=com.budget.allowance](https://play.google.com/store/apps/details?id=com.budget.allowance)
-
 
 ## Features
 - Set a spending goal for a given period of time
