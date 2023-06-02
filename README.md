@@ -8,7 +8,7 @@
 
 <a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
   <div align="center">
-    <img alt="Icon" src="Promotional/google-play-badge.png" width="200px">
+    <img alt="Google Play Badge" src="promotional/google-play-badge.png" width="200px">
   </div>
 </a>
 
