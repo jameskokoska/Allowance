@@ -2,7 +2,7 @@ name: budget_simple
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.0+4
+version: 1.2.0+5
 
 environment:
   sdk: '>=2.19.0-444.0.dev <3.0.0'
@@ -14,7 +14,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.0.0
   path: ^1.8.2
-  package_info_plus: ^1.4.3
+  package_info_plus: ^4.0.2
   shared_preferences: ^2.0.13
   system_theme: ^2.0.0
   intl: ^0.18.0
@@ -28,6 +28,8 @@ dependencies:
   flutter_local_notifications: ^14.0.0+1
   in_app_purchase: ^3.1.7
   in_app_review: ^2.0.6
+  flutter_native_timezone: ^2.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

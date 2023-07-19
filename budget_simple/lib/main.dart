@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:budget_simple/pages/home_page.dart';
+import 'package:budget_simple/pages/main_page_layout.dart';
 import 'package:budget_simple/pages/on_board.dart';
 import 'package:budget_simple/struct/colors.dart';
 import 'package:budget_simple/struct/database_global.dart';
@@ -16,6 +16,9 @@ import 'package:system_theme/system_theme.dart';
 import 'package:budget_simple/database/tables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 /*
 flutter build appbundle --release
@@ -40,6 +43,9 @@ void main() async {
       ),
     );
   }
+  tz.initializeTimeZones();
+  final String locationName = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
   sharedPreferences = await SharedPreferences.getInstance();
   packageInfoGlobal = await PackageInfo.fromPlatform();
   String? notificationPayload = await initializeNotifications();
@@ -47,7 +53,7 @@ void main() async {
   dataSetTranslationsApp = await openAppTranslations();
   runApp(
     DevicePreview(
-      enabled: !kReleaseMode,
+      enabled: false,
       builder: (context) => InitializeApp(key: initializeAppStateKey),
     ),
   );
@@ -180,7 +186,7 @@ class App extends StatelessWidget {
               ? const OnBoardingPage(
                   key: ValueKey("Onboarding"),
                 )
-              : const HomePage(),
+              : const MainPageLayout(),
         ),
       ),
       scrollBehavior: ScrollBehavior(),

@@ -1,4 +1,5 @@
 import 'package:budget_simple/database/tables.dart';
+import 'package:budget_simple/pages/home_page.dart';
 import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/translations.dart';
 import 'package:budget_simple/widgets/text_font.dart';
@@ -38,12 +39,20 @@ class _TransactionsListState extends State<TransactionsList> {
   late ScrollController _scrollController;
   int amountLoaded = DEFAULT_LIMIT;
   String? searchTerm;
+  FocusNode focusNodeTextInput = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+    focusNodeTextInput.addListener(() {
+      if (focusNodeTextInput.hasFocus) {
+        enableKeyboardListen = false;
+      } else {
+        enableKeyboardListen = true;
+      }
+    });
   }
 
   _scrollListener() {
@@ -66,6 +75,7 @@ class _TransactionsListState extends State<TransactionsList> {
       children: [
         TextField(
           maxLength: 40,
+          focusNode: focusNodeTextInput,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
             hintText: translateText('Search Transaction Names'),

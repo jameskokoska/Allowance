@@ -9,8 +9,6 @@ import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:budget_simple/struct/functions.dart';
-import 'package:budget_simple/struct/translations.dart';
 
 class SupportDeveloper extends StatefulWidget {
   const SupportDeveloper({super.key, this.showCloseButton = false});

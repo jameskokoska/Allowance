@@ -59,7 +59,7 @@ void openUrl(String link) async {
 
 extension CapExtension on String {
   String get capitalizeFirst =>
-      this.isNotEmpty ? '${this[0].toUpperCase()}${substring(1)}' : '';
+      isNotEmpty ? '${this[0].toUpperCase()}${substring(1)}' : '';
   String get allCaps => toUpperCase();
   String get capitalizeFirstofEach => replaceAll(RegExp(' +'), ' ')
       .split(" ")

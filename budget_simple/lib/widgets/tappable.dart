@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
 class Tappable extends StatelessWidget {
-  Tappable({
+  const Tappable({
     Key? key,
     this.onTap,
     this.onHighlightChanged,
@@ -37,8 +37,8 @@ class Tappable extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         onTap: onTap,
         onHighlightChanged: onHighlightChanged,
-        child: child,
         onLongPress: onLongPress,
+        child: child,
       ),
     );
     if (!kIsWeb) {
@@ -68,8 +68,8 @@ class Tappable extends StatelessWidget {
     }
 
     return Listener(
-      child: tappable,
       onPointerDown: _onPointerDown,
+      child: tappable,
     );
   }
 }

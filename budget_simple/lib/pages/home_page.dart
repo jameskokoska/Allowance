@@ -1,6 +1,5 @@
 import 'package:budget_simple/main.dart';
-import 'package:budget_simple/pages/about_page.dart';
-import 'package:budget_simple/pages/transactions_history_page.dart';
+import 'package:budget_simple/pages/main_page_layout.dart';
 import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/functions.dart';
 import 'package:budget_simple/struct/notifications.dart';
@@ -12,10 +11,13 @@ import 'package:budget_simple/widgets/increase_limit.dart';
 import 'package:budget_simple/widgets/support_developer.dart';
 import 'package:budget_simple/widgets/tappable.dart';
 import 'package:budget_simple/widgets/text_font.dart';
+import 'package:budget_simple/widgets/top_header_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:budget_simple/database/tables.dart';
+
+bool enableKeyboardListen = true;
 
 initializeAppWithUI(BuildContext context) async {
   await setDailyNotificationOnLaunch(context);
@@ -33,6 +35,7 @@ class HomePageState extends State<HomePage> {
   String formattedOutput = "";
   bool showedWarningSnackbar = false;
   late TextEditingController _textController;
+  FocusNode focusNodeTextInput = FocusNode();
 
   @override
   void initState() {
@@ -44,6 +47,121 @@ class HomePageState extends State<HomePage> {
         initializeAppWithUI(context);
       },
     );
+
+    ServicesBinding.instance.keyboard.addHandler(_onKey);
+  }
+
+  @override
+  void dispose() {
+    ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    super.dispose();
+  }
+
+  bool _onKey(KeyEvent event) {
+    if (enableKeyboardListen == false) return false;
+    if (Navigator.canPop(context)) return false;
+    if (focusNodeTextInput.hasFocus) return false;
+    if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit0) {
+      addToAmount("0");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit1) {
+      addToAmount("1");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit2) {
+      addToAmount("2");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit3) {
+      addToAmount("3");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit4) {
+      addToAmount("4");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit5) {
+      addToAmount("5");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit6) {
+      addToAmount("6");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit7) {
+      addToAmount("7");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit8) {
+      addToAmount("8");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.digit9) {
+      addToAmount("9");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad0) {
+      addToAmount("0");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad1) {
+      addToAmount("1");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad2) {
+      addToAmount("2");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad3) {
+      addToAmount("3");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad4) {
+      addToAmount("4");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad5) {
+      addToAmount("5");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad6) {
+      addToAmount("6");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad7) {
+      addToAmount("7");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad8) {
+      addToAmount("8");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpad9) {
+      addToAmount("9");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.asterisk) {
+      addToAmount("×");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpadMultiply) {
+      addToAmount("×");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.slash) {
+      addToAmount("÷");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpadDivide) {
+      addToAmount("÷");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.add) {
+      addToAmount("+");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpadAdd) {
+      addToAmount("+");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.minus) {
+      addToAmount("-");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpadSubtract) {
+      addToAmount("-");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.period) {
+      addToAmount(".");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+      addToAmount(".");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.backspace) {
+      addToAmount("<");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.delete) {
+      addToAmount("<");
+    } else if (event.runtimeType == KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.enter) {
+      addToAmount(">");
+    }
+    return false;
   }
 
   removeAllAmount() {
@@ -295,27 +413,6 @@ class HomePageState extends State<HomePage> {
       ),
     );
 
-    Widget topHeaderWidget = Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        IconButton(
-          onPressed: () {
-            pushRoute(context, const TransactionsHistoryPage());
-          },
-          icon: const Icon(Icons.receipt),
-          padding: EdgeInsets.zero,
-        ),
-        IconButton(
-          onPressed: () {
-            pushRoute(context, const AboutPage());
-          },
-          icon: const Icon(Icons.settings),
-          padding: EdgeInsets.zero,
-        ),
-        const SizedBox(width: 5),
-      ],
-    );
-
     Widget amountEnteredWidget = Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -366,6 +463,7 @@ class HomePageState extends State<HomePage> {
 
     Widget transactionNameFieldWidget = TextField(
       controller: _textController,
+      focusNode: focusNodeTextInput,
       textAlign: TextAlign.right,
       maxLength: 40,
       decoration: InputDecoration(
@@ -485,9 +583,9 @@ class HomePageState extends State<HomePage> {
           addToAmount: addToAmount,
           heightRatio: 0.75,
           color: Theme.of(context).colorScheme.primaryContainer,
-          child: Column(
+          child: const Column(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [Icon(Icons.check), SizedBox(height: 30)],
+            children: [Icon(Icons.check), SizedBox(height: 30)],
           ),
         ),
       ],
@@ -514,7 +612,9 @@ class HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 5),
-                    topHeaderWidget,
+                    getIsFullScreen(context)
+                        ? const SizedBox.shrink()
+                        : const TopHeaderButtons(large: false),
                     numberLogins == 8 ||
                             numberLogins == 17 ||
                             numberLogins == 30 ||
