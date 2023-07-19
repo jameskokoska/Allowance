@@ -64,7 +64,7 @@ class _MainPageLayoutState extends State<MainPageLayout> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 500),
       switchInCurve: Curves.easeInOutCubic,
       switchOutCurve: Curves.easeInOutCubic,
       transitionBuilder: (Widget child, Animation<double> animation) {
