@@ -15,7 +15,6 @@ import 'package:budget_simple/widgets/text_font.dart';
 import 'package:budget_simple/widgets/time_digits.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_review/in_app_review.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -41,9 +40,10 @@ class AboutPage extends StatelessWidget {
                     ),
                     icon: Icons.star_border,
                     onTap: () async {
-                      final InAppReview inAppReview = InAppReview.instance;
                       if (await inAppReview.isAvailable()) {
                         inAppReview.requestReview();
+                      } else {
+                        inAppReview.openStoreListing();
                       }
                     },
                   ),

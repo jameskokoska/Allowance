@@ -370,22 +370,12 @@ class HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              TextFont(
-                                text:
-                                    "${currency.format(amount.abs() / moreDays)}/${translateText("day")} ${translateText("for")} $moreDays ${translateText("more")} ${moreDays == 1 ? translateText("day") : translateText("days")}",
-                                fontSize: 17,
-                                maxLines: 3,
-                                textAlign: TextAlign.center,
-                                textColor:
-                                    Theme.of(context).colorScheme.tertiary,
-                              ),
-                              amount < 0
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: AnimatedSwitcher(
-                                        duration:
-                                            const Duration(milliseconds: 500),
-                                        child: TextFont(
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: amount < 0
+                                      ? TextFont(
                                           key: ValueKey(amount),
                                           text:
                                               "${currency.format(amount.abs())} ${translateText("overspent")}",
@@ -395,10 +385,20 @@ class HomePageState extends State<HomePage> {
                                           fontSize: 15,
                                           maxLines: 2,
                                           textAlign: TextAlign.center,
+                                        )
+                                      : TextFont(
+                                          key: ValueKey(amount),
+                                          text:
+                                              "${currency.format(amount.abs() / moreDays)}/${translateText("day")} ${translateText("for")} $moreDays ${translateText("more")} ${moreDays == 1 ? translateText("day") : translateText("days")}",
+                                          fontSize: 17,
+                                          maxLines: 3,
+                                          textAlign: TextAlign.center,
+                                          textColor: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
                                         ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink()
+                                ),
+                              ),
                             ],
                           ),
                         ),

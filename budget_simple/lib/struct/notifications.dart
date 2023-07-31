@@ -4,6 +4,7 @@ import 'package:budget_simple/struct/database_global.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -39,8 +40,8 @@ Future<bool> initializeNotificationsPlatform() async {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestPermission();
     tz.initializeTimeZones();
-    DateTime dateTime = DateTime.now();
-    tz.setLocalLocation(tz.getLocation(dateTime.timeZoneName));
+    final String locationName = await FlutterNativeTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
   } catch (e) {
     print("Error setting up notifications: $e");
     return false;
@@ -89,7 +90,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
   );
 
   // schedule a week worth of notifications
-  for (int i = 1; i <= 14; i++) {
+  for (int i = 0; i <= 14; i++) {
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
@@ -105,6 +106,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
+    print("Notification scheduled for $dateTime with id $i");
   }
   // print(await flutterLocalNotificationsPlugin.getActiveNotifications());
 

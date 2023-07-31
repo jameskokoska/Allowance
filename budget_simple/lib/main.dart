@@ -26,10 +26,16 @@ flutter build appbundle --release
 firebase deploy
 */
 
+Color systemTheme = Colors.blue;
+final InAppReview inAppReview = InAppReview.instance;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   database = constructDb('db');
-  await SystemTheme.accentColor.load();
+  if (kIsWeb == false) {
+    await SystemTheme.accentColor.load();
+    systemTheme = SystemTheme.accentColor.accent;
+  }
   // Set up the initial spending goal
   try {
     await database.getSpendingLimit();
@@ -53,7 +59,7 @@ void main() async {
   dataSetTranslationsApp = await openAppTranslations();
   runApp(
     DevicePreview(
-      enabled: false,
+      enabled: kDebugMode,
       builder: (context) => InitializeApp(key: initializeAppStateKey),
     ),
   );
@@ -82,7 +88,6 @@ setSettings() async {
   // print(numberLogins);
   if (!kIsWeb) {
     if (numberLogins == 6 || numberLogins == 15) {
-      final InAppReview inAppReview = InAppReview.instance;
       if (await inAppReview.isAvailable()) {
         inAppReview.requestReview();
       }
@@ -133,7 +138,7 @@ class App extends StatelessWidget {
       title: 'Allowance',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: themeColor ?? SystemTheme.accentColor.accent,
+          seedColor: themeColor ?? systemTheme,
           brightness: Brightness.light,
         ),
         snackBarTheme: const SnackBarThemeData(
@@ -144,7 +149,7 @@ class App extends StatelessWidget {
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: themeColor ?? SystemTheme.accentColor.accent,
+          seedColor: themeColor ?? systemTheme,
           brightness: Brightness.dark,
         ),
         snackBarTheme: const SnackBarThemeData(),
