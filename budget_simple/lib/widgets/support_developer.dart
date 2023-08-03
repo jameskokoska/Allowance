@@ -123,15 +123,17 @@ class _SupportDeveloperState extends State<SupportDeveloper> {
                                   ),
                                   widget.showCloseButton
                                       ? Positioned(
-                                          top: 5,
-                                          right: 5,
+                                          right: 0,
+                                          top: 0,
                                           child: IconButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  closed = true;
-                                                });
-                                              },
-                                              icon: const Icon(Icons.close)),
+                                            padding: const EdgeInsets.all(15),
+                                            onPressed: () {
+                                              setState(() {
+                                                closed = true;
+                                              });
+                                            },
+                                            icon: const Icon(Icons.close),
+                                          ),
                                         )
                                       : const SizedBox.shrink(),
                                   Row(

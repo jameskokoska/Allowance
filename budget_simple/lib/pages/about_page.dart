@@ -30,23 +30,23 @@ class AboutPage extends StatelessWidget {
         child: Column(
           children: [
             const SupportDeveloper(),
-            kIsWeb
-                ? const SizedBox.shrink()
-                : SettingsContainer(
-                    title: "Rate",
-                    afterWidget: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 17,
-                    ),
-                    icon: Icons.star_border,
-                    onTap: () async {
-                      if (await inAppReview.isAvailable()) {
-                        inAppReview.requestReview();
-                      } else {
-                        inAppReview.openStoreListing();
-                      }
-                    },
-                  ),
+            // kIsWeb
+            //     ? const SizedBox.shrink()
+            //     : SettingsContainer(
+            //         title: "Rate",
+            //         afterWidget: const Icon(
+            //           Icons.arrow_forward_ios_rounded,
+            //           size: 17,
+            //         ),
+            //         icon: Icons.star_border,
+            //         onTap: () async {
+            //           if (await inAppReview.isAvailable()) {
+            //             inAppReview.requestReview();
+            //           } else {
+            //             inAppReview.openStoreListing();
+            //           }
+            //         },
+            //       ),
             kIsWeb
                 ? SettingsContainer(
                     title: "Donate",
@@ -151,6 +151,14 @@ class AboutPage extends StatelessWidget {
                 if (label == "Default") return translateText("Default");
                 return languagesDictionary[label] ?? "English";
               },
+            ),
+            SettingsContainerSwitch(
+              title: "Haptic Feedback",
+              onSwitched: (value) {
+                sharedPreferences.setBool("hapticFeedback", value);
+              },
+              initialValue: sharedPreferences.getBool("hapticFeedback") ?? true,
+              icon: Icons.vibration_rounded,
             ),
             kIsWeb ? const SizedBox.shrink() : const NotificationSettings(),
             const Divider(),

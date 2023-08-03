@@ -90,7 +90,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
   );
 
   // schedule a week worth of notifications
-  for (int i = 0; i <= 14; i++) {
+  for (int i = 1; i <= 14; i++) {
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);

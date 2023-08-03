@@ -111,7 +111,20 @@ class TransactionsDatabase extends _$TransactionsDatabase {
       Transaction transaction = await getTransaction(id);
       SnackBar snackBar = SnackBar(
         content: Text(
-            '${translateText("Deleted")} ${currency.format(transaction.amount)} ${translateText("transaction")}'),
+          '${translateText("Deleted")} ${currency.format(transaction.amount)} ${translateText("transaction")}',
+        ),
+        action: SnackBarAction(
+          label: translateText('Undo').capitalizeFirstofEach,
+          onPressed: () {
+            database.createTransaction(
+              TransactionsCompanion(
+                amount: Value(transaction.amount),
+                dateCreated: Value(transaction.dateCreated),
+                name: Value(transaction.name),
+              ),
+            );
+          },
+        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

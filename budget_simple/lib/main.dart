@@ -141,8 +141,8 @@ class App extends StatelessWidget {
           seedColor: themeColor ?? systemTheme,
           brightness: Brightness.light,
         ),
-        snackBarTheme: const SnackBarThemeData(
-          actionTextColor: Color(0xFF81A2D4),
+        snackBarTheme: SnackBarThemeData(
+          actionTextColor: themeColor ?? systemTheme,
         ),
         useMaterial3: true,
         applyElevationOverlayColor: false,
@@ -152,7 +152,11 @@ class App extends StatelessWidget {
           seedColor: themeColor ?? systemTheme,
           brightness: Brightness.dark,
         ),
-        snackBarTheme: const SnackBarThemeData(),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: Colors.black,
+          contentTextStyle: const TextStyle(color: Colors.white),
+          actionTextColor: themeColor ?? systemTheme,
+        ),
         useMaterial3: true,
       ),
       themeMode: themeMode == "Light"
@@ -162,6 +166,7 @@ class App extends StatelessWidget {
               : ThemeMode.system,
       home: SafeArea(
         top: false,
+        bottom: false,
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 1200),
           switchInCurve: Curves.easeInOutCubic,

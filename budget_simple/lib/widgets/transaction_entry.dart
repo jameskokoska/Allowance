@@ -33,7 +33,7 @@ class TransactionEntry extends StatelessWidget {
                     maxLines: 2,
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    text: currency.format(transaction.amount),
+                    text: currency.format(transaction.amount * -1),
                   ),
                   TextFont(
                     maxLines: 2,
@@ -116,7 +116,7 @@ class TransactionEntry extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         TextFont(
-                          text: currency.format(transaction.amount),
+                          text: currency.format(transaction.amount * -1),
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           textAlign: TextAlign.right,

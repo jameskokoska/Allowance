@@ -17,12 +17,6 @@ class TransactionsHistoryPage extends StatelessWidget {
         centerTitle: true,
         title: const TextFont(text: "Transactions"),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.pop(context);
-      //   },
-      //   child: const Icon(Icons.add_rounded),
-      // ),
       body: const TransactionsList(),
     );
   }

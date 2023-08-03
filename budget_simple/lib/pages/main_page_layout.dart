@@ -75,12 +75,9 @@ class _MainPageLayoutState extends State<MainPageLayout> {
             child: Scaffold(
               body: Stack(children: [
                 child,
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: getIsFullScreen(context)
-                      ? const TopHeaderButtons(large: true)
-                      : const SizedBox.shrink(),
-                ),
+                getIsFullScreen(context)
+                    ? const TopHeaderButtons(large: true)
+                    : const SizedBox.shrink(),
               ]),
             ),
           ),

@@ -34,9 +34,10 @@ class HomeMessage extends StatelessWidget {
                   child: Stack(
                     children: [
                       Positioned(
-                        right: 5,
-                        top: 5,
+                        right: 0,
+                        top: 0,
                         child: IconButton(
+                          padding: const EdgeInsets.all(15),
                           icon: const Icon(Icons.close),
                           color: Theme.of(context).colorScheme.tertiary,
                           onPressed: () {

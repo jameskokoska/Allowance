@@ -15,21 +15,25 @@ class TopHeaderButtons extends StatelessWidget {
       children: [
         getIsFullScreen(context)
             ? const SizedBox.shrink()
-            : IconButton(
-                onPressed: () {
-                  pushRoute(context, const TransactionsHistoryPage());
-                },
-                icon: const Icon(Icons.receipt),
-                padding: large ? const EdgeInsets.all(20) : EdgeInsets.zero,
+            : Transform.translate(
+                offset: const Offset(10, 0),
+                child: IconButton(
+                  onPressed: () {
+                    pushRoute(context, const TransactionsHistoryPage());
+                  },
+                  icon: const Icon(Icons.receipt),
+                  padding: large
+                      ? const EdgeInsets.all(20)
+                      : const EdgeInsets.all(15),
+                ),
               ),
         IconButton(
           onPressed: () {
             pushRoute(context, const AboutPage());
           },
           icon: const Icon(Icons.settings),
-          padding: large ? const EdgeInsets.all(20) : EdgeInsets.zero,
+          padding: large ? const EdgeInsets.all(20) : const EdgeInsets.all(15),
         ),
-        const SizedBox(width: 5),
       ],
     );
   }

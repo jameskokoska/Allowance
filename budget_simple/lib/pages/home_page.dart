@@ -8,6 +8,7 @@ import 'package:budget_simple/widgets/amount_button.dart';
 import 'package:budget_simple/widgets/change_currency_icon.dart';
 import 'package:budget_simple/widgets/home_message.dart';
 import 'package:budget_simple/widgets/increase_limit.dart';
+import 'package:budget_simple/widgets/spending_trajectory.dart';
 import 'package:budget_simple/widgets/support_developer.dart';
 import 'package:budget_simple/widgets/tappable.dart';
 import 'package:budget_simple/widgets/text_font.dart';
@@ -122,29 +123,11 @@ class HomePageState extends State<HomePage> {
         event.logicalKey == LogicalKeyboardKey.numpad9) {
       addToAmount("9");
     } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.asterisk) {
-      addToAmount("×");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpadMultiply) {
-      addToAmount("×");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.slash) {
-      addToAmount("÷");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpadDivide) {
-      addToAmount("÷");
-    } else if (event.runtimeType == KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.add) {
       addToAmount("+");
     } else if (event.runtimeType == KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.numpadAdd) {
       addToAmount("+");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.minus) {
-      addToAmount("-");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpadSubtract) {
-      addToAmount("-");
     } else if (event.runtimeType == KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.period) {
       addToAmount(".");
@@ -178,6 +161,9 @@ class HomePageState extends State<HomePage> {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+    if (sharedPreferences.getBool("hapticFeedback") ?? true) {
+      HapticFeedback.heavyImpact();
+    }
     if (action == "<") {
       if (amountCalculated.isNotEmpty) {
         amountCalculated =
@@ -188,24 +174,34 @@ class HomePageState extends State<HomePage> {
         if ((double.tryParse(amountCalculated) ?? 0) > MAX_AMOUNT) {
           amountCalculated = MAX_AMOUNT.toString();
         }
-        int transactionAdded = await database.createTransaction(
+        await database.createTransaction(
           TransactionsCompanion.insert(
             amount: double.tryParse(amountCalculated) ?? 0,
             name: _textController.text,
           ),
         );
-        HapticFeedback.heavyImpact();
-        SnackBar snackBar = SnackBar(
-          content: Text(
-              '${translateText("Added")} $formattedOutput ${translateText("transaction")}'),
-          action: SnackBarAction(
-            label: translateText('Undo').capitalizeFirstofEach,
-            onPressed: () {
-              database.deleteTransaction(transactionAdded, context: context);
-            },
+        removeAllAmount();
+      } else {
+        if (showedWarningSnackbar == false) {
+          final snackBar = SnackBar(
+            content: Text(translateText('Enter an amount')),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          showedWarningSnackbar = true;
+        }
+      }
+    } else if (action == "+") {
+      if (amountCalculated != "") {
+        if ((double.tryParse(amountCalculated) ?? 0) > MAX_AMOUNT) {
+          amountCalculated = MAX_AMOUNT.toString();
+        }
+
+        await database.createTransaction(
+          TransactionsCompanion.insert(
+            amount: (double.tryParse(amountCalculated) ?? 0) * -1,
+            name: _textController.text,
           ),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         removeAllAmount();
       } else {
         if (showedWarningSnackbar == false) {
@@ -461,19 +457,73 @@ class HomePageState extends State<HomePage> {
       ],
     );
 
-    Widget transactionNameFieldWidget = TextField(
-      controller: _textController,
-      focusNode: focusNodeTextInput,
-      textAlign: TextAlign.right,
-      maxLength: 40,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-        hintText: translateText('Transaction Name'),
-        counterText: "",
-        hintStyle: TextStyle(
-          color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+    Widget transactionNameFieldWidget = Stack(
+      alignment: Alignment.bottomLeft,
+      children: [
+        TextField(
+          controller: _textController,
+          focusNode: focusNodeTextInput,
+          textAlign: TextAlign.right,
+          maxLength: 40,
+          scrollPadding: const EdgeInsets.all(10),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+            hintText: translateText("Transaction Name"),
+            counterText: "",
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+            ),
+          ),
         ),
-      ),
+        // Income and Expense button beside text field, instead we use a big (+) button in the calculator
+        // Padding(
+        //   padding: const EdgeInsets.only(bottom: 2, left: 5),
+        //   child: Tappable(
+        //     onTap: () {},
+        //     color: Theme.of(context)
+        //         .colorScheme
+        //         .secondaryContainer
+        //         .withOpacity(0.4),
+        //     borderRadius: 10,
+        //     child: IntrinsicHeight(
+        //       child: IntrinsicWidth(
+        //         child: ClipRRect(
+        //           borderRadius: BorderRadius.circular(10),
+        //           child: Stack(
+        //             alignment: Alignment.topCenter,
+        //             children: [
+        //               FractionallySizedBox(
+        //                 heightFactor: 0.5,
+        //                 child: Container(
+        //                   color:
+        //                       Theme.of(context).colorScheme.secondaryContainer,
+        //                 ),
+        //               ),
+        //               const Padding(
+        //                 padding:
+        //                     EdgeInsets.symmetric(vertical: 6, horizontal: 9),
+        //                 child: Column(
+        //                   children: [
+        //                     TextFont(
+        //                       text: "Expense",
+        //                       fontSize: 13,
+        //                     ),
+        //                     SizedBox(height: 8),
+        //                     TextFont(
+        //                       text: "Income",
+        //                       fontSize: 13,
+        //                     )
+        //                   ],
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ],
     );
 
     Widget amountButtonsTopWidget = SizedBox(
@@ -576,17 +626,32 @@ class HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        AmountButton(
-          animationScale: 0.94,
-          constraints: constraints,
-          text: ">",
-          addToAmount: addToAmount,
-          heightRatio: 0.75,
-          color: Theme.of(context).colorScheme.primaryContainer,
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [Icon(Icons.check), SizedBox(height: 30)],
-          ),
+        Column(
+          children: [
+            AmountButton(
+              constraints: constraints,
+              text: "+",
+              addToAmount: addToAmount,
+              heightRatio: 0.25,
+              color: Theme.of(context).colorScheme.tertiaryContainer,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [Icon(Icons.add_rounded), SizedBox(height: 30)],
+              ),
+            ),
+            AmountButton(
+              animationScale: 0.96,
+              constraints: constraints,
+              text: ">",
+              addToAmount: addToAmount,
+              heightRatio: 0.5,
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [Icon(Icons.check), SizedBox(height: 30)],
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -605,15 +670,14 @@ class HomePageState extends State<HomePage> {
             SliverFillRemaining(
               hasScrollBody: false,
               child: SafeArea(
-                bottom: false,
+                bottom: true,
                 left: false,
                 right: false,
                 top: true,
                 child: Column(
                   children: [
-                    const SizedBox(height: 5),
                     getIsFullScreen(context)
-                        ? const SizedBox.shrink()
+                        ? const SizedBox(height: 50)
                         : const TopHeaderButtons(large: false),
                     numberLogins == 8 ||
                             numberLogins == 17 ||
@@ -624,17 +688,57 @@ class HomePageState extends State<HomePage> {
                             showCloseButton: true,
                           )
                         : const SizedBox.shrink(),
-                    const SizedBox(height: 5),
                     const Spacer(),
                     amountRemainingWidget,
                     const Spacer(),
-                    const SizedBox(height: 5),
                     amountEnteredWidget,
                     transactionNameFieldWidget,
                     const SizedBox(height: 10),
                     amountButtonsTopWidget,
                     amountButtonsBottomWidget,
-                    const SizedBox(height: 50),
+                    StreamBuilder<SpendingLimitData>(
+                      stream: database.watchSpendingLimit(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null) {
+                          return const SizedBox();
+                        }
+                        double amountForPeriod = snapshot.data!.amount;
+                        return StreamBuilder<double?>(
+                          stream: database
+                              .totalSpendAfterDay(snapshot.data!.dateCreated),
+                          builder: (context, snapshotTotalSpent) {
+                            DateTime currentDate = DateTime.now();
+                            double amount = snapshot.data!.amount -
+                                (snapshotTotalSpent.data ?? 0);
+                            double percentSpent =
+                                1 - (amount / amountForPeriod).abs();
+                            if (percentSpent > 1 || amount < 0) {
+                              percentSpent = 1;
+                            } else if (percentSpent < 0) {
+                              percentSpent = 0;
+                            }
+                            double percentToday = 1 -
+                                (snapshot.data!.dateCreatedUntil
+                                            .millisecondsSinceEpoch -
+                                        currentDate.millisecondsSinceEpoch) /
+                                    (snapshot.data!.dateCreatedUntil
+                                            .millisecondsSinceEpoch -
+                                        snapshot.data!.dateCreated
+                                            .millisecondsSinceEpoch);
+                            if (percentToday > 1) {
+                              percentToday = 1;
+                            } else if (percentToday < 0) {
+                              percentToday = 0;
+                            }
+                            return SpendingTrajectory(
+                              height: 50,
+                              percent: percentSpent,
+                              todayPercent: percentToday,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
