@@ -15,10 +15,22 @@
 ## Overview
 Allowance uses a calculator-like interface to let you track your spending habits in a unique and simple way. Discover a budget that works for you and narrow down extra spending habits. It is built using Flutter, Dart, and SQL.
 
+## Featured
+Allowance was featured on [YouTube](https://www.youtube.com/watch?v=uwY6-5CHj44&t=336s)!
+Thanks [Sam Beckman](https://www.youtube.com/@sambeckman)!
+
+<a href="https://www.youtube.com/watch?v=uwY6-5CHj44&t=336s">
+  <div align="center">
+    <img width="80%" src="https://github.com/jameskokoska/Allowance/assets/50821962/18e44c89-a64b-4662-9a9d-fbedbab603c9" alt="Review Video">
+  </div>
+</a>
+
+<br>
 
 | ![Screenshot 1](promotional/Frame1.png) | ![Screenshot 2](promotional/Frame2.png) | ![Screenshot 3](promotional/Frame3.png) |
 | ------------- | ------------- | ------------- |
 | ![Screenshot 4](promotional/Frame4.png) | ![Screenshot 5](promotional/Frame5.png) |  |
+
 
 ## Features
 - Set a spending goal for a given period of time
