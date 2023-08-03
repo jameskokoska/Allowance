@@ -632,12 +632,8 @@ class HomePageState extends State<HomePage> {
               constraints: constraints,
               text: "+",
               addToAmount: addToAmount,
-              heightRatio: 0.25,
               color: Theme.of(context).colorScheme.tertiaryContainer,
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [Icon(Icons.add_rounded), SizedBox(height: 30)],
-              ),
+              child: const Icon(Icons.add_rounded),
             ),
             AmountButton(
               animationScale: 0.96,
