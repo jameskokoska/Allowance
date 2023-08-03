@@ -6,11 +6,16 @@
   </div>
 </a>
 
-<a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
-  <div align="center">
-    <img alt="Google Play Badge" src="promotional/google-play-badge.png" width="200px">
-  </div>
-</a>
+
+<div align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
+    <img alt="Google Play Badge" src="promotional/google-play-badge.png" height="80px">
+  </a>
+  <a href="https://github.com/jameskokoska/Allowance/releases/">
+    <img alt="Google Play Badge" src="promotional/github-badge.png" height="80px">
+  </a>
+</div>
+
 
 ## Overview
 Allowance uses a calculator-like interface to let you track your spending habits in a unique and simple way. Discover a budget that works for you and narrow down extra spending habits. It is built using Flutter, Dart, and SQL.
