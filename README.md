@@ -21,7 +21,7 @@ Thanks [Sam Beckman](https://www.youtube.com/@sambeckman)!
 
 <a href="https://www.youtube.com/watch?v=uwY6-5CHj44&t=336s">
   <div align="center">
-    <img width="80%" src="https://github.com/jameskokoska/Allowance/assets/50821962/18e44c89-a64b-4662-9a9d-fbedbab603c9" alt="Review Video">
+    <img width="80%" src="promotional/review-video-thumbnail.png" alt="Review Video">
   </div>
 </a>
 
