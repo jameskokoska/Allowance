@@ -62,88 +62,66 @@ class HomePageState extends State<HomePage> {
     if (enableKeyboardListen == false) return false;
     if (Navigator.canPop(context)) return false;
     if (focusNodeTextInput.hasFocus) return false;
-    if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit0) {
-      addToAmount("0");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit1) {
-      addToAmount("1");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit2) {
-      addToAmount("2");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit3) {
-      addToAmount("3");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit4) {
-      addToAmount("4");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit5) {
-      addToAmount("5");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit6) {
-      addToAmount("6");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit7) {
-      addToAmount("7");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit8) {
-      addToAmount("8");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.digit9) {
-      addToAmount("9");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad0) {
-      addToAmount("0");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad1) {
-      addToAmount("1");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad2) {
-      addToAmount("2");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad3) {
-      addToAmount("3");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad4) {
-      addToAmount("4");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad5) {
-      addToAmount("5");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad6) {
-      addToAmount("6");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad7) {
-      addToAmount("7");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad8) {
-      addToAmount("8");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpad9) {
-      addToAmount("9");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.add) {
-      addToAmount("+");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpadAdd) {
-      addToAmount("+");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.period) {
-      addToAmount(".");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
-      addToAmount(".");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.backspace) {
-      addToAmount("<");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.delete) {
-      addToAmount("<");
-    } else if (event.runtimeType == KeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.enter) {
-      addToAmount(">");
+    if (event.runtimeType == KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.digit0) {
+        addToAmount("0");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit1) {
+        addToAmount("1");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit2) {
+        addToAmount("2");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit3) {
+        addToAmount("3");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit4) {
+        addToAmount("4");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit5) {
+        addToAmount("5");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit6) {
+        addToAmount("6");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit7) {
+        addToAmount("7");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit8) {
+        addToAmount("8");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit9) {
+        addToAmount("9");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad0) {
+        addToAmount("0");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad1) {
+        addToAmount("1");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad2) {
+        addToAmount("2");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad3) {
+        addToAmount("3");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad4) {
+        addToAmount("4");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad5) {
+        addToAmount("5");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad6) {
+        addToAmount("6");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad7) {
+        addToAmount("7");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad8) {
+        addToAmount("8");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad9) {
+        addToAmount("9");
+      } else if (event.logicalKey == LogicalKeyboardKey.add) {
+        addToAmount("+");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadAdd) {
+        addToAmount("+");
+      } else if (event.logicalKey == LogicalKeyboardKey.period) {
+        addToAmount(".");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+        addToAmount(".");
+      } else if (event.logicalKey == LogicalKeyboardKey.comma) {
+        addToAmount(".");
+      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+        addToAmount("<");
+      } else if (event.logicalKey == LogicalKeyboardKey.delete) {
+        addToAmount("<");
+      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+        addToAmount(">");
+      }
     }
+
     return false;
   }
 
@@ -212,11 +190,11 @@ class HomePageState extends State<HomePage> {
           showedWarningSnackbar = true;
         }
       }
-    } else if (action == ".") {
+    } else if (action == "." || action == ",") {
       if (amountCalculated == "") {
         amountCalculated += "0.";
       } else if (!amountCalculated.contains(".")) {
-        amountCalculated += action;
+        amountCalculated += ".";
       }
     } else {
       if (amountCalculated.split('.').length > 1 &&
@@ -619,7 +597,7 @@ class HomePageState extends State<HomePage> {
                   AmountButton(
                     constraints: constraints,
                     text: getDecimalSeparator(),
-                    addToAmount: addToAmount,
+                    addToAmount: (_) => addToAmount("."),
                   ),
                 ],
               ),
