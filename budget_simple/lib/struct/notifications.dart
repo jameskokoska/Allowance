@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:budget_simple/struct/database_global.dart';
+import 'package:budget_simple/struct/translations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -96,8 +97,8 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.zonedSchedule(
       i,
-      'Add Transactions',
-      'Don\'t forget to add transactions to Allowance',
+      translateText("Add Transactions"),
+      translateText("Don't forget to add transactions to Allowance"),
       dateTime,
       notificationDetails,
       androidAllowWhileIdle: true,

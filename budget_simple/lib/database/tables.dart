@@ -89,7 +89,7 @@ class TransactionsDatabase extends _$TransactionsDatabase {
 
   Future<int> createOrUpdateSpendingLimit(SpendingLimitData spendingLimit) {
     if (spendingLimit.amount > MAX_AMOUNT) {
-      spendingLimit = spendingLimit.copyWith(amount: 999999);
+      spendingLimit = spendingLimit.copyWith(amount: MAX_AMOUNT - 1);
     }
     return into($SpendingLimitTable(attachedDatabase))
         .insertOnConflictUpdate(spendingLimit);

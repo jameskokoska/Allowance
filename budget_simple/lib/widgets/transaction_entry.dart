@@ -31,20 +31,22 @@ class TransactionEntry extends StatelessWidget {
                 children: [
                   TextFont(
                     maxLines: 2,
-                    fontSize: 25,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                     text: currency.format(transaction.amount * -1),
                   ),
+                  const SizedBox(height: 3),
                   TextFont(
                     maxLines: 2,
-                    fontSize: 18,
+                    fontSize: 16,
                     text: DateFormat('MMM d, yyyy')
                         .format(transaction.dateCreated),
                   ),
+                  const SizedBox(height: 3),
                   transaction.name != ""
                       ? TextFont(
                           text: transaction.name,
-                          fontSize: 17,
+                          fontSize: 16,
                           maxLines: 2,
                         )
                       : const SizedBox.shrink(),
@@ -95,15 +97,15 @@ class TransactionEntry extends StatelessWidget {
                         TextFont(
                           text: DateFormat('MMM d, yyyy')
                               .format(transaction.dateCreated),
-                          fontSize: 23,
+                          fontSize: 22,
                           maxLines: 5,
                           fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 1),
+                        const SizedBox(height: 3),
                         TextFont(
                           text: DateFormat('h:mma')
                               .format(transaction.dateCreated),
-                          fontSize: 17,
+                          fontSize: 16,
                           maxLines: 5,
                         ),
                       ],
@@ -117,21 +119,24 @@ class TransactionEntry extends StatelessWidget {
                       children: [
                         TextFont(
                           text: currency.format(transaction.amount * -1),
-                          fontSize: 25,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                           textAlign: TextAlign.right,
                           maxLines: 5,
                         ),
-                        transaction.name != ""
-                            ? TextFont(
-                                text: transaction.name,
-                                fontSize: 17,
-                                maxLines: 5,
-                                textAlign: TextAlign.right,
-                                textColor:
-                                    Theme.of(context).colorScheme.tertiary,
-                              )
-                            : const SizedBox.shrink(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 3),
+                          child: transaction.name != ""
+                              ? TextFont(
+                                  text: transaction.name,
+                                  fontSize: 16,
+                                  maxLines: 5,
+                                  textAlign: TextAlign.right,
+                                  textColor:
+                                      Theme.of(context).colorScheme.tertiary,
+                                )
+                              : const SizedBox.shrink(),
+                        ),
                       ],
                     ),
                   ),

@@ -98,7 +98,7 @@ class AboutPage extends StatelessWidget {
             SettingsContainerDropdown(
               icon: Icons.lightbulb_outline,
               title: "Theme Mode",
-              initial: "System",
+              initial: themeMode,
               items: const ["System", "Light", "Dark"],
               onChanged: (selected) {
                 themeMode = selected;

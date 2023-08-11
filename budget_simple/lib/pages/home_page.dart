@@ -111,7 +111,8 @@ class HomePageState extends State<HomePage> {
         addToAmount(".");
       } else if (event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
         addToAmount(".");
-      } else if (event.logicalKey == LogicalKeyboardKey.comma) {
+      } else if (event.logicalKey == LogicalKeyboardKey.comma &&
+          getDecimalSeparator() == ",") {
         addToAmount(".");
       } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
         addToAmount("<");
@@ -140,7 +141,11 @@ class HomePageState extends State<HomePage> {
       currentFocus.unfocus();
     }
     if (sharedPreferences.getBool("hapticFeedback") ?? true) {
-      HapticFeedback.heavyImpact();
+      if (action == ">" || action == "+") {
+        HapticFeedback.mediumImpact();
+      } else {
+        HapticFeedback.selectionClick();
+      }
     }
     if (action == "<") {
       if (amountCalculated.isNotEmpty) {
@@ -442,7 +447,7 @@ class HomePageState extends State<HomePage> {
           controller: _textController,
           focusNode: focusNodeTextInput,
           textAlign: TextAlign.right,
-          maxLength: 40,
+          maxLength: 60,
           scrollPadding: const EdgeInsets.all(10),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),

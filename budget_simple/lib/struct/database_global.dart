@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 late TransactionsDatabase database;
 
-double MAX_AMOUNT = 999999;
+double MAX_AMOUNT = 999999999999999;
 int DEFAULT_LIMIT = 100;
 
 late SharedPreferences sharedPreferences;
