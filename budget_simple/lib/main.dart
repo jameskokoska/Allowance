@@ -32,9 +32,13 @@ final InAppReview inAppReview = InAppReview.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   database = constructDb('db');
-  if (kIsWeb == false) {
-    await SystemTheme.accentColor.load();
-    systemTheme = SystemTheme.accentColor.accent;
+  try {
+    if (kIsWeb == false) {
+      await SystemTheme.accentColor.load();
+      systemTheme = SystemTheme.accentColor.accent;
+    }
+  } catch (e) {
+    print("Accent color error");
   }
   // Set up the initial spending goal
   try {

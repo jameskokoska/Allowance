@@ -5,8 +5,6 @@ import 'package:budget_simple/struct/translations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -15,13 +13,16 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<String?> initializeNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('notification_icon_android2');
-  const InitializationSettings initializationSettings = InitializationSettings(
+  final DarwinInitializationSettings initializationSettingsDarwin =
+      DarwinInitializationSettings(
+          onDidReceiveLocalNotification: (_, __, ___, ____) {});
+
+  final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
+    iOS: initializationSettingsDarwin,
   );
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    // onDidReceiveBackgroundNotificationResponse: onSelectNotification,
-    // onDidReceiveNotificationResponse: onSelectNotification,
   );
   final NotificationAppLaunchDetails? notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -35,20 +36,46 @@ Future<bool> initializeNotificationsPlatform() async {
   if (kIsWeb || Platform.isLinux) {
     return false;
   }
+  bool result = await checkNotificationsPermissionAll();
+  if (result) {
+    print("Notifications initialized");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future<bool> checkNotificationsPermissionIOS() async {
+  bool? result = await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+  if (result != true) return false;
+  return true;
+}
+
+Future<bool> checkNotificationsPermissionAndroid() async {
+  bool? result = await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
+  if (result != true) return false;
+  return true;
+}
+
+Future<bool> checkNotificationsPermissionAll() async {
   try {
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission();
-    tz.initializeTimeZones();
-    final String locationName = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
+    if (Platform.isAndroid) return await checkNotificationsPermissionAndroid();
+    if (Platform.isIOS) return await checkNotificationsPermissionIOS();
   } catch (e) {
     print("Error setting up notifications: $e");
     return false;
   }
-  print("Notifications initialized");
-  return true;
+  return false;
 }
 
 Future<void> setDailyNotificationOnLaunch(context) async {
@@ -93,6 +120,8 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
   // schedule a week worth of notifications
   for (int i = 1; i <= 14; i++) {
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
+    // For testing notifications:
+    // dateTime = tz.TZDateTime.now(tz.local).add(Duration(seconds: i * 5));
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.zonedSchedule(
