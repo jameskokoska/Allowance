@@ -1,5 +1,6 @@
 import 'package:budget_simple/database/tables.dart';
 import 'package:budget_simple/struct/database_global.dart';
+import 'package:budget_simple/struct/functions.dart';
 import 'package:budget_simple/widgets/tappable.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ DateTime dayInAMonth() {
 }
 
 class _IncreaseLimitState extends State<IncreaseLimit> {
+  TextEditingController amountInputController = TextEditingController();
   double selectedAmount = 0;
   DateTime selectedUntilDate = dayInAMonth();
   DateTime selectedOnDate = DateTime.now();
@@ -88,15 +90,20 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
                 child: IntrinsicWidth(
                   child: TextFormField(
                     autofocus: true,
+                    controller: amountInputController,
                     onChanged: (value) {
+                      if (getDecimalSeparator() == ",") {
+                        value = value.replaceAll(",", ".");
+                      } else if (getDecimalSeparator() == ".") {
+                        value = value.replaceAll(",", "");
+                      }
                       setState(() {
                         selectedAmount = double.tryParse(value) ?? 0;
                       });
                     },
                     textAlign: TextAlign.center,
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      FilteringTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
                     ],
                     keyboardType: TextInputType.number,
                     style: const TextStyle(fontSize: 20),
@@ -222,4 +229,9 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
       ],
     );
   }
+}
+
+bool containsMoreThanOneDecimalSeparator(String input) {
+  List<String> charList = input.split(getDecimalSeparator());
+  return charList.length > 2;
 }

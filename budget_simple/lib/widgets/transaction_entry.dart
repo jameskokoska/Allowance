@@ -33,7 +33,8 @@ class TransactionEntry extends StatelessWidget {
                     maxLines: 2,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    text: currency.format(transaction.amount * -1),
+                    text: currency
+                        .format(removeNegativeZero(transaction.amount * -1)),
                     textColor: getTransactionAmountColor(
                         context, transaction.amount * -1),
                   ),
@@ -120,7 +121,8 @@ class TransactionEntry extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         TextFont(
-                          text: currency.format(transaction.amount * -1),
+                          text: currency.format(
+                              removeNegativeZero(transaction.amount * -1)),
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           textAlign: TextAlign.right,
@@ -136,8 +138,6 @@ class TransactionEntry extends StatelessWidget {
                                   fontSize: 16,
                                   maxLines: 5,
                                   textAlign: TextAlign.right,
-                                  textColor:
-                                      Theme.of(context).colorScheme.tertiary,
                                 )
                               : const SizedBox.shrink(),
                         ),
@@ -161,6 +161,13 @@ class TransactionEntry extends StatelessWidget {
   }
 }
 
+double? removeNegativeZero(double number) {
+  if (number.abs() == 0) {
+    return 0;
+  }
+  return number;
+}
+
 Color? getTransactionAmountColor(BuildContext context, double amount) {
   if (amount > 0) {
     return Theme.of(context).brightness == Brightness.light
@@ -168,7 +175,7 @@ Color? getTransactionAmountColor(BuildContext context, double amount) {
         : Colors.green[300];
   } else if (amount < 0) {
     return Theme.of(context).brightness == Brightness.light
-        ? Colors.red[400]
+        ? const Color(0xFFCE5959)
         : Colors.red[300];
   }
   return null;
