@@ -95,6 +95,7 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
                       } else if (getDecimalSeparator() == ".") {
                         value = value.replaceAll(",", "");
                       }
+                      print(value);
                       setState(() {
                         selectedAmount = double.tryParse(value) ?? 0;
                       });
@@ -103,7 +104,8 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
                     ],
-                    keyboardType: TextInputType.number,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     style: const TextStyle(fontSize: 20),
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(

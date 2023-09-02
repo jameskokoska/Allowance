@@ -264,8 +264,11 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                     child: TextFormField(
                       initialValue: selectedAmount.toInt().toString(),
                       onChanged: (value) {
+                        // We cannot allow users to add decimals here
+                        // We have no way to validate the entry, if a user enters too many decimals
+                        // for example, they can still move on to the next step without any issues.
                         setState(() {
-                          selectedAmount = double.tryParse(value) ?? 0;
+                          selectedAmount = double.tryParse(value) ?? 500;
                         });
                       },
                       textAlign: TextAlign.center,

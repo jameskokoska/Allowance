@@ -137,7 +137,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       // useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
+      builder: (context, child) {
+        if (kReleaseMode) {
+          ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+            return Container(color: Colors.transparent);
+          };
+        }
+        return child ?? const SizedBox.shrink();
+      },
       themeAnimationDuration: const Duration(milliseconds: 1000),
       title: 'Allowance',
       theme: ThemeData(

@@ -2,7 +2,7 @@ name: budget_simple
 description: A simple budget app.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.4.1+15
+version: 1.4.2+16
 
 environment:
   sdk: '>=2.19.0-444.0.dev <3.0.0'
