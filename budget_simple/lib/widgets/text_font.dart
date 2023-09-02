@@ -58,10 +58,11 @@ class TextFont extends StatelessWidget {
       decorationThickness: 2,
       height: 1.1,
     );
-    String textToShow = filter != null ? filter!(text) : text;
+    String textToShow = text;
     if (translate) {
       textToShow = translateText(textToShow);
     }
+    textToShow = filter != null ? filter!(textToShow) : textToShow;
     return autoSizeText
         ? AutoSizeText(
             textToShow,

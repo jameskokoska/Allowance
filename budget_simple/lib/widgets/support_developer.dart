@@ -9,6 +9,7 @@ import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:universal_io/io.dart';
 
 class SupportDeveloper extends StatefulWidget {
   const SupportDeveloper({super.key, this.showCloseButton = false});
@@ -26,7 +27,7 @@ class _SupportDeveloperState extends State<SupportDeveloper> {
 
   @override
   void initState() {
-    if (!kIsWeb) {
+    if (!kIsWeb && Platform.isIOS == false) {
       Stream<List<PurchaseDetails>> purchaseUpdated =
           InAppPurchase.instance.purchaseStream;
       _subscription = purchaseUpdated.listen((purchaseDetailsList) {
@@ -77,7 +78,7 @@ class _SupportDeveloperState extends State<SupportDeveloper> {
 
   @override
   Widget build(BuildContext context) {
-    return kIsWeb || products.keys.isEmpty
+    return kIsWeb || products.keys.isEmpty || Platform.isIOS
         ? const SizedBox.shrink()
         : Column(
             children: [

@@ -166,6 +166,7 @@ class AboutPage extends StatelessWidget {
             const AboutInfoBox(
               title: "App Inspired by Alex Dovhyi",
               link: "https://dribbble.com/shots/20474761-Simple-budgeting-app",
+              displayLink: "https://dribbble.com/...",
             ),
             const AboutInfoBox(
               title: "Flutter",
@@ -186,6 +187,20 @@ class AboutPage extends StatelessWidget {
             const AboutInfoBox(
               title: "Onboarding Images from FlatIcon by mamewmy",
               link: "https://www.freepik.com/author/mamewmy",
+            ),
+            const SizedBox(height: 10),
+            const Divider(),
+            const SizedBox(height: 10),
+            const AboutInfoBox(
+              title: "Privacy Policy",
+              link:
+                  "https://docs.google.com/document/d/11aLF5yTi7oGAc0p69tcA2I3d0whQEThRsYTr1Q1Fz6M/edit?pli=1#heading=h.sqyldmridf41",
+              displayLink: "https://docs.google.com/...",
+            ),
+            const AboutInfoBox(
+              title: "Contact",
+              displayLink: "dapperappdeveloper@gmail.com",
+              link: "mailto:dapperappdeveloper@gmail.com",
             ),
             const SizedBox(height: 10),
             Row(
@@ -337,10 +352,12 @@ class AboutInfoBox extends StatelessWidget {
     Key? key,
     required this.title,
     required this.link,
+    this.displayLink,
   }) : super(key: key);
 
   final String title;
   final String link;
+  final String? displayLink;
 
   @override
   Widget build(BuildContext context) {
@@ -371,10 +388,13 @@ class AboutInfoBox extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         textAlign: TextAlign.center,
                         maxLines: 5,
+                        filter: (text) {
+                          return text.capitalizeFirstofEach;
+                        },
                       ),
                       const SizedBox(height: 6),
                       TextFont(
-                        text: link,
+                        text: displayLink ?? link,
                         fontSize: 13,
                         textAlign: TextAlign.center,
                       ),

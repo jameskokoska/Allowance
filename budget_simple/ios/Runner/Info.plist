@@ -4,6 +4,10 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+  <key>ITSAppUsesNonExemptEncryption</key>
+  <false/>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Photo library access</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

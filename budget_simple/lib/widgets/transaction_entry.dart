@@ -34,6 +34,8 @@ class TransactionEntry extends StatelessWidget {
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     text: currency.format(transaction.amount * -1),
+                    textColor: getTransactionAmountColor(
+                        context, transaction.amount * -1),
                   ),
                   const SizedBox(height: 3),
                   TextFont(
@@ -123,6 +125,8 @@ class TransactionEntry extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           textAlign: TextAlign.right,
                           maxLines: 5,
+                          textColor: getTransactionAmountColor(
+                              context, transaction.amount * -1),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 3),
@@ -155,4 +159,17 @@ class TransactionEntry extends StatelessWidget {
       ),
     );
   }
+}
+
+Color? getTransactionAmountColor(BuildContext context, double amount) {
+  if (amount > 0) {
+    return Theme.of(context).brightness == Brightness.light
+        ? Colors.green[600]
+        : Colors.green[300];
+  } else if (amount < 0) {
+    return Theme.of(context).brightness == Brightness.light
+        ? Colors.red[400]
+        : Colors.red[300];
+  }
+  return null;
 }
