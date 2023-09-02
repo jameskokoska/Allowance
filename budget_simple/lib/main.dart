@@ -63,7 +63,7 @@ void main() async {
   dataSetTranslationsApp = await openAppTranslations();
   runApp(
     DevicePreview(
-      enabled: false,
+      enabled: kDebugMode,
       builder: (context) => InitializeApp(key: initializeAppStateKey),
     ),
   );

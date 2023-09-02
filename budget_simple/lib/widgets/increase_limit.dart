@@ -20,7 +20,6 @@ DateTime dayInAMonth() {
 }
 
 class _IncreaseLimitState extends State<IncreaseLimit> {
-  TextEditingController amountInputController = TextEditingController();
   double selectedAmount = 0;
   DateTime selectedUntilDate = dayInAMonth();
   DateTime selectedOnDate = DateTime.now();
@@ -90,7 +89,6 @@ class _IncreaseLimitState extends State<IncreaseLimit> {
                 child: IntrinsicWidth(
                   child: TextFormField(
                     autofocus: true,
-                    controller: amountInputController,
                     onChanged: (value) {
                       if (getDecimalSeparator() == ",") {
                         value = value.replaceAll(",", ".");
