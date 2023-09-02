@@ -2,17 +2,17 @@
 
 <a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
   <div align="center">
-    <img alt="Icon" src="promotional/icon.png" width="150px">
+    <img alt="Icon" src="promotional/README/icon.png" width="150px">
   </div>
 </a>
 
 
 <div align="center">
   <a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
-    <img alt="Google Play Badge" src="promotional/google-play-badge.png" height="80px">
+    <img alt="Google Play Badge" src="promotional/README/google-play-badge.png" height="80px">
   </a>
   <a href="https://github.com/jameskokoska/Allowance/releases/">
-    <img alt="Google Play Badge" src="promotional/github-badge.png" height="80px">
+    <img alt="Google Play Badge" src="promotional/README/github-badge.png" height="80px">
   </a>
 </div>
 
@@ -26,15 +26,15 @@ Thanks [Sam Beckman](https://www.youtube.com/@sambeckman)!
 
 <a href="https://www.youtube.com/watch?v=uwY6-5CHj44&t=336s">
   <div align="center">
-    <img width="80%" src="promotional/review-video-thumbnail.png" alt="Review Video">
+    <img width="80%" src="promotional/README/review-video-thumbnail.png" alt="Review Video">
   </div>
 </a>
 
 <br>
 
-| ![Screenshot 1](promotional/Frame1.png) | ![Screenshot 2](promotional/Frame2.png) | ![Screenshot 3](promotional/Frame3.png) |
+| ![Screenshot 1](promotional/PlayStore/Frame1.png) | ![Screenshot 2](promotional/PlayStore/Frame2.png) | ![Screenshot 3](promotional/PlayStore/Frame3.png) |
 | ------------- | ------------- | ------------- |
-| ![Screenshot 4](promotional/Frame4.png) | ![Screenshot 5](promotional/Frame5.png) |  |
+| ![Screenshot 4](promotional/PlayStore/Frame4.png) | ![Screenshot 5](promotional/PlayStore/Frame5.png) |  |
 
 
 ## Features
