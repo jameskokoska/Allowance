@@ -94,11 +94,14 @@ class _TransactionsListState extends State<TransactionsList> {
                 limit: amountLoaded, searchTerm: searchTerm),
             builder: (context, snapshot) {
               if (snapshot.data != null && snapshot.data!.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-                  child: TextFont(
-                    text: "No transactions found",
-                    fontSize: 16,
+                return SingleChildScrollView(
+                  controller: _scrollController,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                    child: TextFont(
+                      text: "No transactions found",
+                      fontSize: 16,
+                    ),
                   ),
                 );
               } else if (snapshot.data != null) {
