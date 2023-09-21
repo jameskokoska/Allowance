@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:budget_simple/pages/about_page.dart';
+import 'package:budget_simple/struct/functions.dart';
 import 'package:budget_simple/widgets/plasma_render.dart';
 import 'package:budget_simple/widgets/settings_container.dart';
 import 'package:budget_simple/widgets/tappable.dart';
@@ -9,11 +10,11 @@ import 'package:budget_simple/widgets/text_font.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:sa3_liquid/liquid/plasma/plasma.dart' as plasma;
 import 'package:universal_io/io.dart';
 
 class SupportDeveloper extends StatefulWidget {
-  const SupportDeveloper({super.key, this.showCloseButton = false});
-  final bool showCloseButton;
+  const SupportDeveloper({super.key});
 
   @override
   State<SupportDeveloper> createState() => _SupportDeveloperState();
@@ -59,7 +60,7 @@ class _SupportDeveloperState extends State<SupportDeveloper> {
             Map<String, ProductDetails> productMap = {
               for (var product in response.productDetails) product.id: product
             };
-            inspect(response.productDetails);
+            // inspect(response.productDetails);
             setState(() {
               products = productMap;
             });
@@ -82,191 +83,37 @@ class _SupportDeveloperState extends State<SupportDeveloper> {
         ? const SizedBox.shrink()
         : Column(
             children: [
-              AnimatedSize(
-                alignment: Alignment.topCenter,
-                duration: const Duration(milliseconds: 1500),
-                curve: Curves.easeInOutCubicEmphasized,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: closed
-                      ? Container(
-                          key: const ValueKey(1),
-                        )
-                      : ConstrainedBox(
-                          key: const ValueKey(2),
-                          constraints: const BoxConstraints(maxWidth: 550),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: Tappable(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer
-                                  .withOpacity(0.7),
-                              onTap: () {},
-                              borderRadius: 15,
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: PlasmaRender(
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .secondaryContainer
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .primaryContainer,
-                                      ),
-                                    ),
-                                  ),
-                                  widget.showCloseButton
-                                      ? Positioned(
-                                          right: 0,
-                                          top: 0,
-                                          child: IconButton(
-                                            padding: const EdgeInsets.all(15),
-                                            onPressed: () {
-                                              setState(() {
-                                                closed = true;
-                                              });
-                                            },
-                                            icon: const Icon(Icons.close),
-                                          ),
-                                        )
-                                      : const SizedBox.shrink(),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 25),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: TextFont(
-                                                  text: "Support the Developer",
-                                                  fontSize: 28,
-                                                  fontWeight: FontWeight.bold,
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 5,
-                                                ),
-                                              ),
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 8),
-                                                child: TextFont(
-                                                  text:
-                                                      "Buy the developer something off the menu!",
-                                                  fontSize: 15,
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 5,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 25,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 28.0),
-                                                child: Wrap(
-                                                  spacing: 15,
-                                                  runSpacing: 10,
-                                                  alignment:
-                                                      WrapAlignment.center,
-                                                  children: [
-                                                    DonationMenuItem(
-                                                        subheader:
-                                                            products["coffee"]!
-                                                                .price,
-                                                        onTap: () {
-                                                          InAppPurchase.instance
-                                                              .buyConsumable(
-                                                            purchaseParam:
-                                                                PurchaseParam(
-                                                              productDetails:
-                                                                  products[
-                                                                      "coffee"]!,
-                                                            ),
-                                                          );
-                                                        },
-                                                        imagePath:
-                                                            "assets/icons/coffee-cup.png"),
-                                                    DonationMenuItem(
-                                                        subheader:
-                                                            products["cake"]!
-                                                                .price,
-                                                        onTap: () {
-                                                          InAppPurchase.instance
-                                                              .buyConsumable(
-                                                            purchaseParam:
-                                                                PurchaseParam(
-                                                              productDetails:
-                                                                  products[
-                                                                      "cake"]!,
-                                                            ),
-                                                          );
-                                                        },
-                                                        imagePath:
-                                                            "assets/icons/cupcake.png"),
-                                                    DonationMenuItem(
-                                                        subheader:
-                                                            products["meal"]!
-                                                                .price,
-                                                        onTap: () {
-                                                          InAppPurchase.instance
-                                                              .buyConsumable(
-                                                            purchaseParam:
-                                                                PurchaseParam(
-                                                              productDetails:
-                                                                  products[
-                                                                      "meal"]!,
-                                                            ),
-                                                          );
-                                                        },
-                                                        imagePath:
-                                                            "assets/icons/salad.png"),
-                                                  ],
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                ),
-              ),
-              widget.showCloseButton
-                  ? const SizedBox.shrink()
-                  : const Divider(),
-              widget.showCloseButton
+              const Divider(),
+              closed
                   ? const SizedBox.shrink()
                   : SettingsContainer(
-                      title: "Donate Monthly",
+                      title: "Buy me a coffee",
                       afterWidget: const Icon(
                         Icons.arrow_forward_ios_rounded,
                         size: 17,
                       ),
-                      icon: Icons.thumb_up_alt_outlined,
+                      icon: Icons.coffee,
                       onTap: () {
                         InAppPurchase.instance.buyConsumable(
                           purchaseParam: PurchaseParam(
-                            productDetails: products["subscription"]!,
+                            productDetails: products["coffee"]!,
+                          ),
+                        );
+                      },
+                    ),
+              closed
+                  ? const SizedBox.shrink()
+                  : SettingsContainer(
+                      title: "Buy me a cake",
+                      afterWidget: const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 17,
+                      ),
+                      icon: Icons.cake,
+                      onTap: () {
+                        InAppPurchase.instance.buyConsumable(
+                          purchaseParam: PurchaseParam(
+                            productDetails: products["cake"]!,
                           ),
                         );
                       },
@@ -300,4 +147,150 @@ void _listenToPurchaseUpdated(
       }
     }
   });
+}
+
+class CashewPromo extends StatelessWidget {
+  const CashewPromo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 550),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      tileMode: TileMode.mirror,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Theme.of(context).brightness == Brightness.light
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.4)
+                            : Theme.of(context).colorScheme.primary,
+                        Theme.of(context).brightness == Brightness.light
+                            ? Theme.of(context).colorScheme.primaryContainer
+                            : Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).brightness == Brightness.light
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.4)
+                            : Theme.of(context).colorScheme.primary
+                      ],
+                      stops: const [
+                        0,
+                        0.3,
+                        5.3,
+                      ],
+                    ),
+                    backgroundBlendMode: BlendMode.srcOver,
+                  ),
+                  child: plasma.PlasmaRenderer(
+                    type: plasma.PlasmaType.infinity,
+                    particles: 7,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? const Color(0x28B4B4B4)
+                        : const Color(0x2DB6B6B6),
+                    blur: 0.4,
+                    size: 0.8,
+                    speed: 3.5,
+                    offset: 0,
+                    blendMode: BlendMode.plus,
+                    particleType: plasma.ParticleType.atlas,
+                    variation1: 0,
+                    variation2: 0,
+                    variation3: 0,
+                    rotation: 0,
+                  ),
+                ),
+              ),
+              Image(
+                image: AssetImage(
+                  Theme.of(context).brightness == Brightness.light
+                      ? kIsWeb
+                          ? "assets/cashew-promo/CashewPromoLightAll.png"
+                          : "assets/cashew-promo/CashewPromoLight.png"
+                      : kIsWeb
+                          ? "assets/cashew-promo/CashewPromoDarkAll.png"
+                          : "assets/cashew-promo/CashewPromoDark.png",
+                ),
+              ),
+              Positioned.fill(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    splashColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    onTap: () {
+                      if (kIsWeb) {
+                        openUrl("https://cashewapp.web.app/");
+                      } else {
+                        openUrl(
+                            "https://play.google.com/store/apps/details?id=com.budget.tracker_app");
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CashewPromoPopup extends StatefulWidget {
+  const CashewPromoPopup({super.key});
+
+  @override
+  State<CashewPromoPopup> createState() => _CashewPromoPopupState();
+}
+
+class _CashewPromoPopupState extends State<CashewPromoPopup> {
+  bool closed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      alignment: Alignment.topCenter,
+      duration: const Duration(milliseconds: 1500),
+      curve: Curves.easeInOutCubicEmphasized,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: closed
+            ? Container(
+                key: const ValueKey(1),
+              )
+            : Stack(
+                key: const ValueKey(2),
+                children: [
+                  const CashewPromo(),
+                  Positioned(
+                    right: 5,
+                    top: 5,
+                    child: IconButton(
+                      padding: const EdgeInsets.all(15),
+                      onPressed: () {
+                        setState(() {
+                          closed = true;
+                        });
+                      },
+                      icon: const Icon(Icons.close),
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
 }

@@ -2,7 +2,7 @@ name: budget_simple
 description: A simple budget app.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.4.2+16
+version: 1.5.0+17
 
 environment:
   sdk: '>=2.19.0-444.0.dev <3.0.0'
@@ -44,4 +44,5 @@ flutter:
   assets:
     - assets/icons/
     - assets/onboard/
+    - assets/cashew-promo/
     - assets/translations/translationsAppKeyed.json

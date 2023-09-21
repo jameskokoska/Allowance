@@ -86,12 +86,12 @@ setSettings() async {
       sharedPreferences.getBool("dismissedPopupAchieved") ?? false;
   dismissedPopupDoneOver =
       sharedPreferences.getBool("dismissedPopupDoneOver") ?? false;
-  numberLogins = sharedPreferences.getInt("numberLogins") ?? 0;
-  sharedPreferences.setInt("numberLogins", numberLogins + 1);
+  numberLogins = sharedPreferences.getInt("numberLogins2") ?? 0;
+  sharedPreferences.setInt("numberLogins2", numberLogins + 1);
   hasOnboarded = sharedPreferences.getBool("hasOnboarded") ?? false;
   // print(numberLogins);
   if (!kIsWeb) {
-    if (numberLogins == 6 || numberLogins == 15) {
+    if (numberLogins == 6 || numberLogins == 15 || numberLogins == 25) {
       if (await inAppReview.isAvailable()) {
         inAppReview.requestReview();
       }

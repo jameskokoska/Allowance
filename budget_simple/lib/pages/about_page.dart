@@ -7,6 +7,7 @@ import 'package:budget_simple/struct/functions.dart';
 import 'package:budget_simple/struct/languages_dict.dart';
 import 'package:budget_simple/struct/notifications.dart';
 import 'package:budget_simple/struct/translations.dart';
+import 'package:budget_simple/widgets/page_framework.dart';
 import 'package:budget_simple/widgets/select_color.dart';
 import 'package:budget_simple/widgets/settings_container.dart';
 import 'package:budget_simple/widgets/support_developer.dart';
@@ -21,215 +22,228 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const TextFont(text: "Settings"),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SupportDeveloper(),
-            // kIsWeb
-            //     ? const SizedBox.shrink()
-            //     : SettingsContainer(
-            //         title: "Rate",
-            //         afterWidget: const Icon(
-            //           Icons.arrow_forward_ios_rounded,
-            //           size: 17,
-            //         ),
-            //         icon: Icons.star_border,
-            //         onTap: () async {
-            //           if (await inAppReview.isAvailable()) {
-            //             inAppReview.requestReview();
-            //           } else {
-            //             inAppReview.openStoreListing();
-            //           }
-            //         },
-            //       ),
-            kIsWeb
-                ? SettingsContainer(
-                    title: "Donate",
-                    afterWidget: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 17,
+    return PageFramework(
+      childBuilder: (scrollController) => Scaffold(
+        appBar: AppBar(
+          title: const TextFont(text: "Settings"),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          controller: scrollController,
+          child: Column(
+            children: [
+              const CashewPromo(),
+              const SizedBox(height: 5),
+              const TextFont(
+                text: "From the same developer!",
+                fontSize: 15,
+              ),
+              const SizedBox(height: 10),
+              const SupportDeveloper(),
+              // kIsWeb
+              //     ? const SizedBox.shrink()
+              //     : SettingsContainer(
+              //         title: "Rate",
+              //         afterWidget: const Icon(
+              //           Icons.arrow_forward_ios_rounded,
+              //           size: 17,
+              //         ),
+              //         icon: Icons.star_border,
+              //         onTap: () async {
+              //           if (await inAppReview.isAvailable()) {
+              //             inAppReview.requestReview();
+              //           } else {
+              //             inAppReview.openStoreListing();
+              //           }
+              //         },
+              //       ),
+              kIsWeb
+                  ? SettingsContainer(
+                      title: "Donate",
+                      afterWidget: const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 17,
+                      ),
+                      icon: Icons.thumb_up_alt_outlined,
+                      onTap: () {
+                        kIsWeb
+                            ? openUrl("https://ko-fi.com/dapperappdeveloper")
+                            : null;
+                      },
+                    )
+                  : const SizedBox.shrink(),
+              SettingsContainer(
+                title: "Allowance is Open Source!",
+                afterWidget: const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 17,
+                ),
+                icon: Icons.code,
+                onTap: () {
+                  openUrl("https://github.com/jameskokoska/Budget-Simple");
+                },
+              ),
+              const Divider(),
+              Center(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                  child: SizedBox(
+                    height: 65,
+                    child: SelectColor(
+                      setSelectedColor: (Color? color) {
+                        themeColor = color;
+                        if (color == null) {
+                          sharedPreferences.remove("themeColor");
+                        } else {
+                          sharedPreferences.setString(
+                              "themeColor", colorToString(color) ?? "");
+                        }
+                        initializeAppStateKey.currentState?.refreshAppState();
+                      },
+                      selectedColor: themeColor,
                     ),
-                    icon: Icons.thumb_up_alt_outlined,
+                  ),
+                ),
+              ),
+              SettingsContainerDropdown(
+                icon: Icons.lightbulb_outline,
+                title: "Theme Mode",
+                initial: themeMode,
+                items: const ["System", "Light", "Dark"],
+                onChanged: (selected) {
+                  themeMode = selected;
+                  sharedPreferences.setString("themeMode", selected);
+                  initializeAppStateKey.currentState?.refreshAppState();
+                },
+                getLabel: (label) {
+                  return label;
+                },
+              ),
+              SettingsContainer(
+                title: "Reset Allowance",
+                afterWidget: const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 17,
+                ),
+                icon: Icons.arrow_circle_up_rounded,
+                onTap: () {
+                  addAmountBottomSheet(context);
+                },
+              ),
+              SettingsContainer(
+                title: "Change Currency",
+                afterWidget: const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 17,
+                ),
+                icon: Icons.category_outlined,
+                onTap: () {
+                  changeCurrencyIconBottomSheet(context);
+                },
+              ),
+              SettingsContainerDropdown(
+                translate: false,
+                icon: Icons.language,
+                title: "Language",
+                initial: language,
+                items: ["Default", ...languagesDictionary.keys.toList()],
+                onChanged: (selected) {
+                  if (selected == "Default") {
+                    language = getDeviceLanguage() ?? "en";
+                    sharedPreferences.remove("language");
+                  } else {
+                    language = selected;
+                    sharedPreferences.setString("language", selected);
+                  }
+                  initializeAppStateKey.currentState?.refreshAppState();
+                },
+                getLabel: (label) {
+                  if (label == "Default") return translateText("Default");
+                  return languagesDictionary[label] ?? "English";
+                },
+              ),
+              SettingsContainerSwitch(
+                title: "Haptic Feedback",
+                onSwitched: (value) {
+                  sharedPreferences.setBool("hapticFeedback", value);
+                },
+                initialValue:
+                    sharedPreferences.getBool("hapticFeedback") ?? true,
+                icon: Icons.vibration_rounded,
+              ),
+              kIsWeb ? const SizedBox.shrink() : const NotificationSettings(),
+              const Divider(),
+              const SizedBox(height: 10),
+              const AboutInfoBox(
+                title: "App Inspired by Alex Dovhyi",
+                link:
+                    "https://dribbble.com/shots/20474761-Simple-budgeting-app",
+                displayLink: "https://dribbble.com/...",
+              ),
+              const AboutInfoBox(
+                title: "Flutter",
+                link: "https://flutter.dev/",
+              ),
+              const AboutInfoBox(
+                title: "Drift SQL Database",
+                link: "https://drift.simonbinder.eu/",
+              ),
+              const AboutInfoBox(
+                title: "Icons from FlatIcon by Freepik",
+                link: "https://www.flaticon.com/",
+              ),
+              const AboutInfoBox(
+                title: "Onboarding Images from FlatIcon by pch.vector",
+                link: "https://www.freepik.com/author/pch-vector",
+              ),
+              const AboutInfoBox(
+                title: "Onboarding Images from FlatIcon by mamewmy",
+                link: "https://www.freepik.com/author/mamewmy",
+              ),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              const AboutInfoBox(
+                title: "Privacy Policy",
+                link:
+                    "https://docs.google.com/document/d/11aLF5yTi7oGAc0p69tcA2I3d0whQEThRsYTr1Q1Fz6M/edit?pli=1#heading=h.sqyldmridf41",
+                displayLink: "https://docs.google.com/...",
+              ),
+              const AboutInfoBox(
+                title: "Contact",
+                displayLink: "dapperappdeveloper@gmail.com",
+                link: "mailto:dapperappdeveloper@gmail.com",
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Tappable(
+                    borderRadius: 15,
                     onTap: () {
-                      kIsWeb
-                          ? openUrl("https://ko-fi.com/dapperappdeveloper")
-                          : null;
+                      showLicensePage(
+                          context: context,
+                          applicationVersion:
+                              "${"v${packageInfoGlobal.version}+${packageInfoGlobal.buildNumber}"}, db-v$schemaVersionGlobal",
+                          applicationLegalese:
+                              "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
                     },
-                  )
-                : const SizedBox.shrink(),
-            SettingsContainer(
-              title: "Allowance is Open Source!",
-              afterWidget: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 17,
-              ),
-              icon: Icons.code,
-              onTap: () {
-                openUrl("https://github.com/jameskokoska/Budget-Simple");
-              },
-            ),
-            const Divider(),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
-                child: SizedBox(
-                  height: 65,
-                  child: SelectColor(
-                    setSelectedColor: (Color? color) {
-                      themeColor = color;
-                      if (color == null) {
-                        sharedPreferences.remove("themeColor");
-                      } else {
-                        sharedPreferences.setString(
-                            "themeColor", colorToString(color) ?? "");
-                      }
-                      initializeAppStateKey.currentState?.refreshAppState();
-                    },
-                    selectedColor: themeColor,
-                  ),
-                ),
-              ),
-            ),
-            SettingsContainerDropdown(
-              icon: Icons.lightbulb_outline,
-              title: "Theme Mode",
-              initial: themeMode,
-              items: const ["System", "Light", "Dark"],
-              onChanged: (selected) {
-                themeMode = selected;
-                sharedPreferences.setString("themeMode", selected);
-                initializeAppStateKey.currentState?.refreshAppState();
-              },
-              getLabel: (label) {
-                return label;
-              },
-            ),
-            SettingsContainer(
-              title: "Reset Allowance",
-              afterWidget: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 17,
-              ),
-              icon: Icons.arrow_circle_up_rounded,
-              onTap: () {
-                addAmountBottomSheet(context);
-              },
-            ),
-            SettingsContainer(
-              title: "Change Currency",
-              afterWidget: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 17,
-              ),
-              icon: Icons.category_outlined,
-              onTap: () {
-                changeCurrencyIconBottomSheet(context);
-              },
-            ),
-            SettingsContainerDropdown(
-              translate: false,
-              icon: Icons.language,
-              title: "Language",
-              initial: language,
-              items: ["Default", ...languagesDictionary.keys.toList()],
-              onChanged: (selected) {
-                if (selected == "Default") {
-                  language = getDeviceLanguage() ?? "en";
-                  sharedPreferences.remove("language");
-                } else {
-                  language = selected;
-                  sharedPreferences.setString("language", selected);
-                }
-                initializeAppStateKey.currentState?.refreshAppState();
-              },
-              getLabel: (label) {
-                if (label == "Default") return translateText("Default");
-                return languagesDictionary[label] ?? "English";
-              },
-            ),
-            SettingsContainerSwitch(
-              title: "Haptic Feedback",
-              onSwitched: (value) {
-                sharedPreferences.setBool("hapticFeedback", value);
-              },
-              initialValue: sharedPreferences.getBool("hapticFeedback") ?? true,
-              icon: Icons.vibration_rounded,
-            ),
-            kIsWeb ? const SizedBox.shrink() : const NotificationSettings(),
-            const Divider(),
-            const SizedBox(height: 10),
-            const AboutInfoBox(
-              title: "App Inspired by Alex Dovhyi",
-              link: "https://dribbble.com/shots/20474761-Simple-budgeting-app",
-              displayLink: "https://dribbble.com/...",
-            ),
-            const AboutInfoBox(
-              title: "Flutter",
-              link: "https://flutter.dev/",
-            ),
-            const AboutInfoBox(
-              title: "Drift SQL Database",
-              link: "https://drift.simonbinder.eu/",
-            ),
-            const AboutInfoBox(
-              title: "Icons from FlatIcon by Freepik",
-              link: "https://www.flaticon.com/",
-            ),
-            const AboutInfoBox(
-              title: "Onboarding Images from FlatIcon by pch.vector",
-              link: "https://www.freepik.com/author/pch-vector",
-            ),
-            const AboutInfoBox(
-              title: "Onboarding Images from FlatIcon by mamewmy",
-              link: "https://www.freepik.com/author/mamewmy",
-            ),
-            const SizedBox(height: 10),
-            const Divider(),
-            const SizedBox(height: 10),
-            const AboutInfoBox(
-              title: "Privacy Policy",
-              link:
-                  "https://docs.google.com/document/d/11aLF5yTi7oGAc0p69tcA2I3d0whQEThRsYTr1Q1Fz6M/edit?pli=1#heading=h.sqyldmridf41",
-              displayLink: "https://docs.google.com/...",
-            ),
-            const AboutInfoBox(
-              title: "Contact",
-              displayLink: "dapperappdeveloper@gmail.com",
-              link: "mailto:dapperappdeveloper@gmail.com",
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Tappable(
-                  borderRadius: 15,
-                  onTap: () {
-                    showLicensePage(
-                        context: context,
-                        applicationVersion:
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: TextFont(
+                        textColor: Theme.of(context).colorScheme.tertiary,
+                        fontSize: 15,
+                        text:
                             "${"v${packageInfoGlobal.version}+${packageInfoGlobal.buildNumber}"}, db-v$schemaVersionGlobal",
-                        applicationLegalese:
-                            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: TextFont(
-                      textColor: Theme.of(context).colorScheme.tertiary,
-                      fontSize: 15,
-                      text:
-                          "${"v${packageInfoGlobal.version}+${packageInfoGlobal.buildNumber}"}, db-v$schemaVersionGlobal",
-                      textAlign: TextAlign.right,
+                        textAlign: TextAlign.right,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:budget_simple/database/tables.dart';
 import 'package:budget_simple/pages/home_page.dart';
 import 'package:budget_simple/struct/database_global.dart';
 import 'package:budget_simple/struct/translations.dart';
+import 'package:budget_simple/widgets/page_framework.dart';
 import 'package:budget_simple/widgets/text_font.dart';
 import 'package:budget_simple/widgets/transaction_entry.dart';
 import 'package:flutter/material.dart';
@@ -12,18 +13,21 @@ class TransactionsHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const TextFont(text: "Transactions"),
+    return PageFramework(
+      childBuilder: (scrollController) => Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const TextFont(text: "Transactions"),
+        ),
+        body: TransactionsList(scrollController: scrollController),
       ),
-      body: const TransactionsList(),
     );
   }
 }
 
 class TransactionsList extends StatefulWidget {
-  const TransactionsList({super.key});
+  const TransactionsList({required this.scrollController, super.key});
+  final ScrollController scrollController;
 
   @override
   State<TransactionsList> createState() => _TransactionsListState();
@@ -38,7 +42,7 @@ class _TransactionsListState extends State<TransactionsList> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    _scrollController = widget.scrollController;
     _scrollController.addListener(_scrollListener);
     focusNodeTextInput.addListener(() {
       if (focusNodeTextInput.hasFocus) {

@@ -663,9 +663,7 @@ class HomePageState extends State<HomePage> {
                             numberLogins == 30 ||
                             numberLogins == 50 ||
                             numberLogins == 100
-                        ? const SupportDeveloper(
-                            showCloseButton: true,
-                          )
+                        ? const CashewPromoPopup()
                         : const SizedBox.shrink(),
                     const Spacer(),
                     amountRemainingWidget,
