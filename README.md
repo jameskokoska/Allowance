@@ -1,20 +1,29 @@
 <h1 align="center" style="font-size:28px; line-height:1"><b>Allowance</b></h1>
 
-<a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
+<a href="https://allowance-track.web.app/">
   <div align="center">
     <img alt="Icon" src="promotional/README/icon.png" width="150px">
   </div>
 </a>
 
+<br />
 
 <div align="center">
+  <a href="https://apps.apple.com/us/app/allowance/id6463812712">
+    <img alt="iOS App Store Badge" src="promotional/README/app-store-badge.png" height="60px">
+  </a>
   <a href="https://play.google.com/store/apps/details?id=com.budget.allowance">
-    <img alt="Google Play Badge" src="promotional/README/google-play-badge.png" height="80px">
+    <img alt="Google Play Badge" src="promotional/README/google-play-badge.png" height="60px">
   </a>
   <a href="https://github.com/jameskokoska/Allowance/releases/">
-    <img alt="Google Play Badge" src="promotional/README/github-badge.png" height="80px">
+    <img alt="GitHub Badge" src="promotional/README/github-badge.png" height="60px">
+  </a>
+  <a href="https://allowance-track.web.app/">
+    <img alt="PWA Badge" src="promotional/README/pwa-badge.png" height="60px">
   </a>
 </div>
+
+<br />
 
 
 ## Overview
@@ -52,10 +61,14 @@ To use the app, simply set a spending goal and track your transactions. You can 
 * [SQL](https://drift.simonbinder.eu/)
 
 ## Releases
-### Web App
-A web app version of Allowance is available at [https://allowance-track.web.app/](https://allowance-track.web.app/).
+### iOS: App Store
+An App Store release is available at https://apps.apple.com/us/app/allowance/id6463812712
 ### Android: Google Play
-A Google Play release is available at [https://play.google.com/store/apps/details?id=com.budget.allowance](https://play.google.com/store/apps/details?id=com.budget.allowance).
+A Google Play release is available at https://play.google.com/store/apps/details?id=com.budget.allowance
+### GitHub: Android
+The open source GitHub release for Android is available at https://github.com/jameskokoska/Allowance/releases/
+### Web App
+A web app version of Allowance is available at https://allowance-track.web.app/
 
 ## Supported Languages
 Allowance is currently available in the following languages:
