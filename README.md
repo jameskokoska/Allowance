@@ -56,7 +56,7 @@ Thanks [Sam Beckman](https://www.youtube.com/@sambeckman)!
 To use the app, simply set a spending goal and track your transactions. You can readjust your budget at the end of each period to ensure you're on track with your financial goals.
 
 ## Technologies
-* [Flutter](https://flutter.dev/)
+* [Flutter](https://flutter.dev/) (v3.19.6)
 * [Dart](https://dart.dev/)
 * [SQL](https://drift.simonbinder.eu/)
 

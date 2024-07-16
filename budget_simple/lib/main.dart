@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 /*
 flutter build appbundle --release
@@ -54,8 +54,8 @@ void main() async {
     );
   }
   tz.initializeTimeZones();
-  final String locationName = await FlutterNativeTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
+  final String locationName = await FlutterTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(locationName));
   sharedPreferences = await SharedPreferences.getInstance();
   packageInfoGlobal = await PackageInfo.fromPlatform();
   String? notificationPayload = await initializeNotifications();

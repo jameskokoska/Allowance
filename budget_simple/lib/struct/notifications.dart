@@ -62,7 +62,7 @@ Future<bool> checkNotificationsPermissionAndroid() async {
   bool? result = await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
+      ?.requestNotificationsPermission();
   if (result != true) return false;
   return true;
 }
@@ -135,6 +135,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
     print("Notification scheduled for $dateTime with id $i");
   }
