@@ -34,15 +34,15 @@ class AboutPage extends StatelessWidget {
           controller: scrollController,
           child: Column(
             children: [
-              if (Platform.isIOS != Platform.isIOS) const CashewPromo(),
-              if (Platform.isIOS != Platform.isIOS) const SizedBox(height: 5),
-              if (Platform.isIOS != Platform.isIOS)
+              if (Platform.isIOS == false) const CashewPromo(),
+              if (Platform.isIOS == false) const SizedBox(height: 5),
+              if (Platform.isIOS == false)
                 const TextFont(
                   text: "From the same developer!",
                   fontSize: 15,
                 ),
-              if (Platform.isIOS != Platform.isIOS) const SizedBox(height: 10),
-              if (Platform.isIOS != Platform.isIOS) const SupportDeveloper(),
+              if (Platform.isIOS == false) const SizedBox(height: 10),
+              if (Platform.isIOS == false) const SupportDeveloper(),
               // kIsWeb
               //     ? const SizedBox.shrink()
               //     : SettingsContainer(
